@@ -1,58 +1,282 @@
--- Arquivo de apoio, caso você queira criar tabelas como as aqui criadas para a API funcionar.
--- Você precisa executar os comandos no banco de dados para criar as tabelas,
--- ter este arquivo aqui não significa que a tabela em seu BD estará como abaixo!
+CREATE DATABASE IF NOT EXISTS jurassicpark2;
+USE jurassicpark2;
 
-/*
-comandos para mysql server
-*/
-
-CREATE DATABASE aquatech;
-
-USE aquatech;
-
-CREATE TABLE empresa (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-	razao_social VARCHAR(50),
-	cnpj CHAR(14),
-	codigo_ativacao VARCHAR(50)
+CREATE TABLE IF NOT EXISTS `user`(
+	id INT NOT NULL AUTO_INCREMENT,
+    
+    name VARCHAR(60) NOT NULL,
+	email VARCHAR(120) NOT NULL UNIQUE,
+    password VARCHAR(120) NOT NULL,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP(),
+    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP(),
+    
+    PRIMARY KEY(id)
 );
 
-CREATE TABLE usuario (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-	nome VARCHAR(50),
-	email VARCHAR(50),
-	senha VARCHAR(50),
-	fk_empresa INT,
-	FOREIGN KEY (fk_empresa) REFERENCES empresa(id)
+CREATE TABLE IF NOT EXISTS park(
+	idUser INT NOT NULL UNIQUE,
+    
+    name VARCHAR(120) NOT NULL,
+    rating FLOAT NOT NULL DEFAULT 0,
+    balance INT NOT NULL DEFAULT 0,
+	createdAt DATETIME DEFAULT CURRENT_TIMESTAMP(),
+    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP(),
+    
+    PRIMARY KEY(idUser),
+    CONSTRAINT fkParkUser FOREIGN KEY (idUser) REFERENCES `user`(id) ON DELETE CASCADE,
+    
+    CONSTRAINT chkParkRating CHECK(rating BETWEEN 0 AND 5),
+    CONSTRAINT chkParkBalance CHECK(balance BETWEEN 0 AND 999999)
 );
 
-CREATE TABLE aviso (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-	titulo VARCHAR(100),
-	descricao VARCHAR(150),
-	fk_usuario INT,
-	FOREIGN KEY (fk_usuario) REFERENCES usuario(id)
+CREATE TABLE IF NOT EXISTS building(
+	id INT NOT NULL AUTO_INCREMENT,
+    idUpgrade INT NULL UNIQUE,
+    
+    name VARCHAR(45) NOT NULL UNIQUE,
+    category VARCHAR(45) NOT NULL,
+    durability INT NOT NULL DEFAULT 0,
+    baseCost INT NOT NULL DEFAULT 0,
+    upgradeCost INT NULL,
+    maxUnits INT NULL,
+    
+    PRIMARY KEY (id),
+    CONSTRAINT fkBuildingBuilding FOREIGN KEY (idUpgrade) REFERENCES building(id),
+	
+    CONSTRAINT chkBuildingCategory CHECK(category IN('terrain', 'path', 'enclosure', 'building')),
+	CONSTRAINT chkBuildingDurability CHECK(durability >= 0),
+    CONSTRAINT chkBuildingBaseCost CHECK(baseCost >= 0),
+    CONSTRAINT chkBuildingUpgradeCost CHECK(upgradeCost >= 0)
 );
 
-create table aquario (
-/* em nossa regra de negócio, um aquario tem apenas um sensor */
-	id INT PRIMARY KEY AUTO_INCREMENT,
-	descricao VARCHAR(300),
-	fk_empresa INT,
-	FOREIGN KEY (fk_empresa) REFERENCES empresa(id)
+CREATE TABLE IF NOT EXISTS species(
+	id INT NOT NULL AUTO_INCREMENT,
+    
+    name VARCHAR(45) NOT NULL,
+    temporalRange VARCHAR(45) NOT NULL,
+    locomotionType VARCHAR(45) NOT NULL,
+    heightInMeters DECIMAL(10, 3) NOT NULL,
+    weightInKilograms DECIMAL(10, 3) NOT NULL,
+    diet VARCHAR(45) NOT NULL,
+    aggressiveness FLOAT NOT NULL,
+    ratingWeight FLOAT NOT NULL,
+    hatchCost INT NOT NULL DEFAULT 0,
+    hatchSuccessRate FLOAT NOT NULL DEFAULT 1,
+    
+    PRIMARY KEY (id),
+
+	CONSTRAINT chkSpeciesDiet CHECK(diet IN('herbívoro', 'carnívoro', 'onívoro')),
+    CONSTRAINT chkSpeciesHeight CHECK(heightInMeters > 0),
+    CONSTRAINT chkSpeciesWeight CHECK(weightInKilograms > 0),
+    CONSTRAINT chkSpeciesAggressiveness CHECK(aggressiveness BETWEEN 0 AND 1),
+    CONSTRAINT chkSpeciesRatingWeight CHECK(ratingWeight BETWEEN 0 AND 5),
+    CONSTRAINT chkSpeciesHatchCost CHECK(hatchCost >= 0),
+    CONSTRAINT chkSpecieshatchSuccessRate CHECK(hatchSuccessRate BETWEEN 0 AND 1)
 );
 
-/* esta tabela deve estar de acordo com o que está em INSERT de sua API do arduino - dat-acqu-ino */
-
-create table medida (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-	temperatura DECIMAL,
-	momento DATETIME,
-	fk_aquario INT,
-	FOREIGN KEY (fk_aquario) REFERENCES aquario(id)
+CREATE TABLE IF NOT EXISTS tile(
+	idPark INT NOT NULL,
+    positionRow INT NOT NULL,
+    positionCol INT NOT NULL,
+    
+    idBuilding INT NOT NULL,
+    idSpecies INT NULL,
+    
+    currentHp INT NOT NULL DEFAULT 100,
+    maxHp INT NOT NULL DEFAULT 100,
+    removable TINYINT NOT NULL DEFAULT 1,
+    
+    PRIMARY KEY (idPark, positionRow, positionCol),
+    CONSTRAINT fkTilePark FOREIGN KEY (idPark) REFERENCES park(idUser) ON DELETE CASCADE,
+    CONSTRAINT fkTileBuilding FOREIGN KEY (idBuilding) REFERENCES building(id),
+    CONSTRAINT fkTileSpecies FOREIGN KEY (idSpecies) REFERENCES species(id),
+    
+	CONSTRAINT chkTileCurrentHp CHECK(currentHp BETWEEN 0 AND 100),
+    CONSTRAINT chkTileMaxHp CHECK(maxHp BETWEEN 0 AND 100)
 );
 
-insert into empresa (razao_social, codigo_ativacao) values ('Empresa 1', 'ED145B');
-insert into empresa (razao_social, codigo_ativacao) values ('Empresa 2', 'A1B2C3');
-insert into aquario (descricao, fk_empresa) values ('Aquário de Estrela-do-mar', 1);
-insert into aquario (descricao, fk_empresa) values ('Aquário de Peixe-dourado', 2);
+
+INSERT INTO species 
+    (name, temporalRange, locomotionType, heightInMeters, weightInKilograms, diet, aggressiveness, hatchCost, hatchSuccessRate, ratingWeight) 
+VALUES 
+    (
+        'compsognathus', 
+        'Jurássico Superior', 'Bípede', 0.260, 3.000, 
+        'carnívoro', 0.2, 50, 0.9, 0.5
+    ),
+    (
+        'tiranossauro', 
+        'Cretáceo Superior', 'Bípede', 4.000, 8000.000, 
+        'carnívoro', 0.9, 1000, 0.5, 2.0
+    ),
+    (
+        'espinossauro', 
+        'Cretáceo Superior', 'Bípede', 4.500, 14000.000, 
+        'carnívoro', 0.9, 1200, 0.4, 2.0
+    ),
+    (
+        'braquiossauro', 
+        'Jurássico Superior', 'Quadrúpede', 12.000, 40000.000, 
+        'herbívoro', 0.4, 950, 0.5, 2.0
+    ),
+    (
+        'coritossauro', 
+        'Cretáceo Superior', 'Bípede/Quadrúpede', 2.500, 3000.000, 
+        'herbívoro', 0.4, 150, 0.8, 1.0
+    ),
+    (
+        'parassaurolofo', 
+        'Cretáceo Superior', 'Bípede/Quadrúpede', 3.000, 2500.000, 
+        'herbívoro', 0.4, 150, 0.8, 1.0
+    ),
+    (
+        'triceratops', 
+        'Cretáceo Superior', 'Quadrúpede', 3.000, 9000.000, 
+        'herbívoro', 0.6, 250, 0.6, 1.5
+    ),
+    (
+        'velociraptor', 
+        'Cretáceo Superior', 'Bípede', 0.500, 15.000, 
+        'carnívoro', 0.8, 100, 0.8, 1.0
+    ),
+    (
+        'dilofossauro', 
+        'Jurássico Inferior', 'Bípede', 2.000, 400.000, 
+        'carnívoro', 0.5, 100, 0.8, 1.0
+    ),
+    (
+        'anquilossauro', 
+        'Cretáceo Superior', 'Quadrúpede', 1.700, 6000.000, 
+        'herbívoro', 0.6, 300, 0.6, 1.5
+    ),
+    (
+        'ceratossauro', 
+        'Jurássico Superior', 'Bípede', 2.000, 980.000, 
+        'carnívoro', 0.6, 250, 0.8, 1.5
+    ),
+    (
+        'estegossauro', 
+        'Jurássico Superior', 'Quadrúpede', 2.700, 5300.000, 
+        'herbívoro', 0.6, 250, 0.6, 1.5
+    );
+
+INSERT INTO building (idUpgrade, name, category, durability, baseCost, maxUnits, upgradeCost) 
+VALUES
+	-- | TERRENO | --
+	(
+        null,
+		'terrain-grass',
+        'terrain', 
+        default, 10, null, null
+    ),
+	(
+        null,
+		'terrain-trees',
+        'terrain',
+        default, 10, null, null
+    ),
+	(
+        null,
+		'terrain-dirt',
+        'terrain',
+        default, 10, null, null
+    ),
+	(
+        null,
+		'terrain-pond',
+        'terrain',
+        default, 10, null, null
+    ),
+    
+	-- | CAMINHO | --
+	(
+        null,
+		'path',
+        'path',
+        default, 50, null, null
+    ),
+	(
+        null,
+		'path-l',
+        'path',
+        default, 50, null, null
+    ),
+	(
+        null,
+		'path-t',
+        'path',
+        default, 50, null, null
+    ),
+	(
+        null,
+		'path-cross',
+        'path',
+        default, 50, null, null
+    ),
+	-- | CERCADOS | --
+	(
+        null,
+		'enclosure-1',
+        'enclosure',
+        1, 100, null, 150
+    ),
+	(
+        null,
+		'enclosure-2',
+        'enclosure',
+        5, 250, null, 350
+    ),
+	(
+        null,
+		'enclosure-3',
+        'enclosure',
+        10, 500, null, null
+    ),
+	-- | CONSTRUÇÕES | --
+	(
+        null,
+		'entrance',
+        'building',
+        default, 0, 1, null
+    ),
+	(
+        null,
+		'visitor-center',
+        'building',
+        default, 0, 1, null
+    ),
+	(
+        null,
+		'hatchery',
+        'building',
+        default, 250, null, null
+    );
+
+UPDATE building SET idUpgrade = 10 WHERE name = 'enclosure-1';
+UPDATE building SET idUpgrade = 11 WHERE name = 'enclosure-2';
+
+CREATE OR REPLACE VIEW vw_parkRating
+AS 
+SELECT u.id userId, IFNULL(LEAST(SUM(s.ratingWeight), 5), 0) rating
+FROM user u
+JOIN park p ON u.id = p.idUser
+JOIN tile t ON p.idUser = t.idPark
+LEFT JOIN species s ON t.idSpecies = s.id
+WHERE t.idSpecies IS NOT NULL
+GROUP BY userId;
+
+CREATE OR REPLACE VIEW vw_tiles
+AS
+SELECT t.*, b.name, b.category, b.durability, b.upgradeCost
+FROM user u
+JOIN park p ON u.id = p.idUser
+JOIN tile t ON p.idUser = t.idPark
+JOIN building b ON t.idBuilding = b.id;
+
+CREATE OR REPLACE VIEW vw_dinosaur
+AS
+SELECT s.*, t.idPark, t.positionRow, t.positionCol
+FROM user u
+JOIN park p ON u.id = p.idUser
+JOIN tile t ON p.idUser = t.idPark
+JOIN species s ON t.idSpecies = s.id;

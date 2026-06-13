@@ -2,7 +2,7 @@ var buildingModel = require("../models/buildingModel");
 
 function getAll(req, res) {
     buildingModel.getAll()
-    .then((result) => res.status(200).send(result))
+    .then((result) => res.status(200).send({count: result.length, buildings: result}))
     .catch((error) => {
         console.error("[buildingController] Erro: ", error);
         res.status(500).json({error: error.sqlMessage});
@@ -24,7 +24,7 @@ function getByCategory(req, res) {
     const {category} = req.query;
     
     buildingModel.getByCategory(category)
-    .then((result) => res.status(200).send(result))
+    .then((result) => res.status(200).send({count: result.length, buildings: result}))
     .catch((error) => {
         console.error("[buildingController] Erro: ", error);
         res.status(500).json({error: error.sqlMessage});

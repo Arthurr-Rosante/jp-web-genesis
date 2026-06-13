@@ -2,7 +2,7 @@ var speciesModel = require("../models/speciesModel");
 
 function getAll(req, res) {
     speciesModel.getAll()
-    .then((result) => res.status(200).send(result))
+    .then((result) => res.status(200).send({count: result.length, species: result}))
     .catch((error) => {
         console.error("[speciesController] Erro: ", error);
         res.status(500).json({error: error.sqlMessage});
@@ -24,7 +24,7 @@ function getByDiet(req, res) {
     const {diet} = req.query;
     
     speciesModel.getByDiet(diet)
-    .then((result) => res.status(200).send(result))
+    .then((result) => res.status(200).send({count: result.length, species: result}))
     .catch((error) => {
         console.error("[speciesController] Erro: ", error);
         res.status(500).json({error: error.sqlMessage});

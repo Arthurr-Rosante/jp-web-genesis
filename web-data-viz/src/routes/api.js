@@ -5,12 +5,12 @@ var userRouter = require("./users");
 var parkRouter = require("./parks");
 // var tileRouter = require("./tiles");
 var buildingRouter = require("./buildings");
-// var speciesRouter = require("./species");
+var speciesRouter = require("./species");
 
 router.use("/users", userRouter);
 router.use("/parks", parkRouter);
 // router.use("/tiles", tileRouter);
 router.use("/buildings", buildingRouter);
-// router.use("/species", speciesRouter);
+router.use("/species", speciesRouter);
 
 module.exports = router;

@@ -273,7 +273,7 @@ JOIN park p ON u.id = p.idUser
 JOIN tile t ON p.idUser = t.idPark
 JOIN building b ON t.idBuilding = b.id;
 
-CREATE OR REPLACE VIEW vw_dinosaur
+CREATE OR REPLACE VIEW vw_dinosaurs
 AS
 SELECT s.*, t.idPark, t.positionRow, t.positionCol
 FROM user u

@@ -49,6 +49,41 @@ function login(req, res) {
 
 }
 
+// Register com Stored Procedure
+function register(req, res) {
+    const { username, email, password } = req.body;
+
+    if (username == undefined) {
+        res.status(400).send({message: "Seu nome está undefined!"});
+    } else if (email == undefined) {
+        res.status(400).send({message: "Seu email está undefined!"});
+    } else if (password == undefined) {
+        res.status(400).send({message: "Sua senha está undefined!"});
+    } else {
+        userModel.getByEmail(email)
+        .then((result) => {
+            if(result.length > 0) {
+                res.status(409).json({message: "Este endereço de email já está em uso!"});
+                return;
+            }
+
+            // Registra usuário
+            userModel.register(username, email, password)
+            .then((result) => res.status(200).json({message: "Usuário registrado com sucesso!"}))
+            .catch((error) => {
+                console.error("[userController] Erro: ", error);
+                res.status(500).json(error.sqlMessage);
+            });
+        })
+        .catch((error) => {
+            console.error("[userController] Erro: ", error);
+            res.status(500).json(error.sqlMessage);
+        });
+    }
+}
+
+// Register Padrão
+/*
 function register(req, res) {
     const { username, email, password } = req.body;
 
@@ -126,7 +161,7 @@ function register(req, res) {
         });
     }
 }
-
+*/
 module.exports = {
     login,
     register

@@ -10,13 +10,23 @@ function login(email, password) {
     return database.executar(instrucaoSql);
 }
 
+// Register com Stored Procedure
 function register(name, email, password) {
     var instrucaoSql = `
-        INSERT INTO user(name, email, password) VALUE ('${name}', '${email}', '${password}');
+        CALL sp_registerUser('${name}', '${email}', '${password}');
     `;
     console.log("[userModel] Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
+
+// Register Padrão
+// function register(name, email, password) {
+//     var instrucaoSql = `
+//         INSERT INTO user(name, email, password) VALUE ('${name}', '${email}', '${password}');
+//     `;
+//     console.log("[userModel] Executando a instrução SQL: \n" + instrucaoSql);
+//     return database.executar(instrucaoSql);
+// }
 
 function getByEmail(email) {
     var instrucaoSql = `SELECT ${allowedFields} FROM user WHERE email = '${email}'`;

@@ -95,75 +95,6 @@ CREATE TABLE IF NOT EXISTS tile(
     CONSTRAINT chkTileMaxHp CHECK(maxHp BETWEEN 0 AND 100)
 );
 
-DELIMITER $$
-CREATE PROCEDURE sp_registerUser(
-	IN username VARCHAR(60),
-    IN email VARCHAR(120),
-    IN password VARCHAR(120)
-) BEGIN
-
-	DECLARE v_userId INT;
-    
-    DECLARE rowId INT DEFAULT 0;
-    DECLARE colId INT DEFAULT 0;
-
-	DECLARE EXIT HANDLER FOR SQLEXCEPTION
-	BEGIN
-		ROLLBACK;
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error during user registration setup.';
-	END;
-    
-    START TRANSACTION;
-	-- 1. CRIAR USUÁRIO
-    INSERT INTO `user`(name, email, password) VALUE (username, email, password);
-    SET v_userId = LAST_INSERT_ID();
-    
-	-- 2. CRIAR PARQUE
-	INSERT INTO park(idUser, name) VALUE(v_userId, CONCAT('Parque de ', username));
-    
-	-- 3. CRIAR TILES DO PARQUE (GRID 5X4)
-	WHILE colId < 5 DO
-		SET rowId = 0;
-		WHILE rowId < 4 DO
-			INSERT INTO tile(idPark, positionRow, positionCol, idBuilding) 
-				VALUE(v_userId, rowId, colId, (SELECT id FROM building WHERE category = 'terrain' ORDER BY RAND() LIMIT 1));
-			SET rowId = rowId + 1;
-        END WHILE;
-		SET colId = colId + 1;
-    END WHILE;
-    
-	-- 4. COLOCAR BUILDINGS PREDEFINIDAS
-    -- Portão de Entrada
-	UPDATE tile 
-		SET idBuilding = (SELECT id FROM building WHERE name = 'entrance'), removable = 0
-	WHERE idPark = v_userId AND positionRow = 0 AND positionCol = 4;
-    -- Centro de Visitantes
-	UPDATE tile 
-		SET idBuilding = (SELECT id FROM building WHERE name = 'visitor-center'), removable = 0
-	WHERE idPark = v_userId AND positionRow = 1 AND positionCol = 0;
-    -- Laboratório de Incubação
-	UPDATE tile 
-		SET idBuilding = (SELECT id FROM building WHERE name = 'hatchery')
-	WHERE idPark = v_userId AND positionRow = 2 AND positionCol = 0;
-    -- Primeiro Cercado
-	UPDATE tile 
-		SET idBuilding = (SELECT id FROM building WHERE name = 'enclosure-1'), removable = 0
-	WHERE idPark = v_userId AND positionRow = 2 AND positionCol = 3;
-    
-	-- 5. COLOCAR PRIMEIRO DINOSSAURO
-    UPDATE tile 
-		SET idSpecies = (SELECT id FROM species WHERE name like '%parassaurolofo%')
-    WHERE idPark = v_userId AND positionRow = 2 AND positionCol = 3;
-    
-    -- 6. ATUALIZAR DADOS DO PARQUE
-	UPDATE park
-		SET balance = 1000, rating = (SELECT rating FROM vw_parkRating WHERE userId = v_userId)
-	WHERE idUser = v_userId;
-    
-	COMMIT;
-END$$
-DELIMITER ;
-
 INSERT INTO species 
     (name, temporalRange, locomotionType, heightInMeters, weightInKilograms, diet, aggressiveness, hatchCost, hatchSuccessRate, ratingWeight) 
 VALUES 
@@ -348,3 +279,63 @@ FROM user u
 JOIN park p ON u.id = p.idUser
 JOIN tile t ON p.idUser = t.idPark
 JOIN species s ON t.idSpecies = s.id;
+
+DELIMITER $$
+CREATE PROCEDURE sp_registerUser(
+	IN username VARCHAR(60),
+    IN email VARCHAR(120),
+    IN password VARCHAR(120)
+) BEGIN
+
+	DECLARE v_userId INT;
+
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error during user registration setup.';
+	END;
+    
+    START TRANSACTION;
+	-- 1. CRIAR USUÁRIO
+    INSERT INTO `user`(name, email, password) VALUE (username, email, password);
+    SET v_userId = LAST_INSERT_ID();
+    
+	-- 2. CRIAR PARQUE
+	INSERT INTO park(idUser, name) VALUE(v_userId, CONCAT('Parque de ', username));
+    
+	-- 3. CRIAR TILES DO PARQUE (GRID 5X4) com construções predefinidas
+	INSERT INTO tile(idPark, positionRow, positionCol, idBuilding, idSpecies, removable) 
+	VALUES
+	    -- 1° Linha
+		(v_userId, 0, 0, (SELECT id FROM building WHERE category = 'terrain' ORDER BY RAND() LIMIT 1), default, default),
+		(v_userId, 0, 1, (SELECT id FROM building WHERE category = 'terrain' ORDER BY RAND() LIMIT 1), default, default),
+		(v_userId, 0, 2, (SELECT id FROM building WHERE category = 'terrain' ORDER BY RAND() LIMIT 1), default, default),
+		(v_userId, 0, 3, (SELECT id FROM building WHERE category = 'terrain' ORDER BY RAND() LIMIT 1), default, default),
+		(v_userId, 0, 4, (SELECT id FROM building WHERE name = 'entrance'), default, 0),
+		-- 2° Linha
+		(v_userId, 1, 0, (SELECT id FROM building WHERE name = 'visitor-center'), default, 0),
+		(v_userId, 1, 1, (SELECT id FROM building WHERE category = 'terrain' ORDER BY RAND() LIMIT 1), default, default),
+		(v_userId, 1, 2, (SELECT id FROM building WHERE category = 'terrain' ORDER BY RAND() LIMIT 1), default, default),
+		(v_userId, 1, 3, (SELECT id FROM building WHERE category = 'terrain' ORDER BY RAND() LIMIT 1), default, default),
+		(v_userId, 1, 4, (SELECT id FROM building WHERE category = 'terrain' ORDER BY RAND() LIMIT 1), default, default),
+		-- 3° Linha
+		(v_userId, 2, 0, (SELECT id FROM building WHERE name = 'hatchery'), default, default),
+		(v_userId, 2, 1, (SELECT id FROM building WHERE category = 'terrain' ORDER BY RAND() LIMIT 1), default, default),
+		(v_userId, 2, 2, (SELECT id FROM building WHERE category = 'terrain' ORDER BY RAND() LIMIT 1), default, default),
+		(v_userId, 2, 3, (SELECT id FROM building WHERE name = 'enclosure-1'), (SELECT id FROM species WHERE name = 'parassaurolofo'), 0),
+		(v_userId, 2, 4, (SELECT id FROM building WHERE category = 'terrain' ORDER BY RAND() LIMIT 1), default, default),
+		-- 4° Linha
+		(v_userId, 3, 0, (SELECT id FROM building WHERE category = 'terrain' ORDER BY RAND() LIMIT 1), default, default),
+		(v_userId, 3, 1, (SELECT id FROM building WHERE category = 'terrain' ORDER BY RAND() LIMIT 1), default, default),
+		(v_userId, 3, 2, (SELECT id FROM building WHERE category = 'terrain' ORDER BY RAND() LIMIT 1), default, default),
+		(v_userId, 3, 3, (SELECT id FROM building WHERE category = 'terrain' ORDER BY RAND() LIMIT 1), default, default),
+		(v_userId, 3, 4, (SELECT id FROM building WHERE category = 'terrain' ORDER BY RAND() LIMIT 1), default, default);
+    
+    -- 4. ATUALIZAR DADOS DO PARQUE
+	UPDATE park
+		SET balance = 1000, rating = (SELECT rating FROM vw_parkRating WHERE userId = v_userId)
+	WHERE idUser = v_userId;
+    
+	COMMIT;
+END$$
+DELIMITER ;

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JPWG | Registro</title>
+  
+  <!-- ESTILOS CSS -->
+  <link rel="stylesheet" href="./css/globals.css">
+  <link rel="stylesheet" href="./css/auth.css">
+
+  <!-- BIBLIOTECAS EXTERNAS -->
+  <script src="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/index.min.js"></script>
+</head>
+<body onload="onPageLoad()">
+    <div class="form-wrapper">
+        <form id="auth-form" onsubmit="submitForm(event)" oninput="checkFormFields(this)">
+            <div class="form-header">
+                <h2>JP Web Genesis</h2>
+                <p>Realizar Cadastro</p>
+            </div>
+            <div class="form-body">
+                <div class="field-group">
+                    <div class="field">
+                        <label class="field-label" for="ipt-username">Nome Completo</label>
+                        <input id="ipt-username" type="text" oninput="validateUsername(this)" placeholder="Ex: Alan Grant" minlength="3" class="field-input has-errors" required>
+                        <p id="ipt-username-auth-message" class="auth-message"></p>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="ipt-email">Endereço de Email</label>
+                        <input id="ipt-email" type="email"  oninput="validateEmail(this)" placeholder="Ex: drgrant@ingen.com" class="field-input has-errors" required>
+                        <p id="ipt-email-auth-message" class="auth-message"></p>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="ipt-password">Código de Acesso (Senha)</label>
+                        <div class="password-wrapper">
+                            <input id="ipt-password" type="password" oninput="validatePassword(this)" placeholder="Min. 8 caracteres" minlength="8" class="field-input has-errors" required>
+                            <i id="ipt-password-icon" class="ph ph-eye" onclick="togglePasswordVisiblity('ipt-password')"></i>
+                        </div>
+                        <p id="ipt-password-auth-message" class="auth-message"></p>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="ipt-password-confirm">Confirmar Código de Acesso</label>
+                        <div class="password-wrapper">
+                            <input id="ipt-password-confirm" type="password"  oninput="validatePassword(this, true)" placeholder="Min. 8 caracteres" minlength="8" class="field-input has-errors" required>
+                            <i id="ipt-password-confirm-icon" class="ph ph-eye" onclick="togglePasswordVisiblity('ipt-password-confirm')"></i>
+                        </div>
+                        <p id="ipt-password-confirm-auth-message" class="auth-message"></p>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" id="submit-btn" disabled><span>Requerer Acesso</span><i class="ph ph-caret-circle-up"></i></button>
+                </div>
+            </div>
+            <div class="form-footer">
+                <a href="./login.html">Já possui acesso? <span>Entre aqui</span></a>
+            </div>
+        </form>
+    </div>
+
+<!-- SCRIPTS -->
+<script src="./js/utils/storage.js"></script>
+<script src="./js/utils/toast.js"></script>
+<script src="./js/validations.js"></script>
+<script>
+    function onPageLoad() {
+        // Redirecionamento se já estiver logado
+        if(storage.get("JPWG_DATA")) {
+            window.location = "./park.html";
+        }
+    }
+    
+    function checkFormFields(form) {
+        const authBtn = document.getElementById("submit-btn");
+        const fields = form.querySelectorAll(".field-input");
+        const hasErrors = Array.from(fields).some(field => field.classList.contains("has-errors"));
+        
+        authBtn.disabled = hasErrors;
+        if(hasErrors) {
+            authBtn.className = "";
+        } else {
+            authBtn.className = "button--secondary";
+        }
+    }
+
+    function submitForm(event) {
+        event.preventDefault();
+
+        const username = String(document.getElementById("ipt-username").value).trim();
+        const email = String(document.getElementById("ipt-email").value).trim();
+        const password = String(document.getElementById("ipt-password").value).trim();
+
+        console.log("[register.html] | Iniciando Registro...");
+        
+        fetch("/api/users/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, email, password })
+        })
+        .then((response) => response.json().then(data => {
+            if(!response.ok) {
+                throw data.message || "Erro desconhecido ao realizar cadastro";
+            } else {
+                console.log("[register.html] | Sucesso!");
+                toast({
+                    variant: "success",
+                    title: "Cadastro Realizado!",
+                    message: data.message
+                });
+                setTimeout(() => {window.location = "./login.html"}, 1000);
+            }
+        }))
+        .catch(error => {
+            console.error("[register.html] | Falha no Cadastro: ", String(error));
+            toast({
+                variant: "destructive",
+                title: "Cadastro Falhou!",
+                message: String(error)  
+            });
+        });
+    }
+</script>
+</body>
+</html>

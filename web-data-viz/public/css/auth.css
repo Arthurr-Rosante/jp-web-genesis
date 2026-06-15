@@ -1,0 +1,137 @@
+.form-wrapper {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    background-image: url("../assets/svgs/auth-background.svg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#auth-form {
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    width: 420px;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+    padding: 32px;
+    z-index: 3;
+}
+
+.form-header {
+    text-align: center;
+}
+
+.form-header h2 {
+    font-size: 54px;
+    font-weight: 100;
+    color: var(--primary);
+}
+.form-header p {
+    letter-spacing: 2px;
+}
+
+.form-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.form-body .field-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    row-gap: 16px;
+}
+
+.field-group .field {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.field .password-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.field i {
+    cursor: pointer;
+    position: absolute;
+    top: 25%;
+    right: 5%;
+}
+
+.field i:hover {
+    color: var(--primary);
+}
+
+.field .field-label {
+    font-size: small;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.field .field-input {
+    padding: 6px 16px;
+    font-size: 16px;
+    padding-right: 48px;
+    font-family: 'Courier Prime', monospace;
+}
+
+.auth-message {
+    color: var(--destructive);
+    font-size: 16px;
+    font-family: 'Courier Prime', monospace;
+    margin-top: 16px;
+}
+
+.field .field-input .auth-message {
+    display: none;
+}
+
+.field .field-input.has-errors .auth-message {
+    display: block;
+}
+
+.form-actions {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+#submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 16px;
+}
+
+#submit-btn i {
+    rotate: 45deg;
+}
+
+.form-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-footer a {
+    font-size: 16px;
+}
+
+.form-footer a span {
+    text-decoration: underline;
+}

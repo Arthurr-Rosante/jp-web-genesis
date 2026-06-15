@@ -8,12 +8,30 @@ function create(idPark, positionRow, positionCol, idBuilding) {
     return database.executar(instrucaoSql);
 }
 
-function getAllByParkId(idPark) {
-    var instrucaoSql = `
-        SELECT * FROM vw_tiles WHERE idPark = ${idPark};
+async function getAllByParkId(idPark) {
+    var instrucaoSql1 = `
+    SELECT * FROM vw_tiles WHERE idPark = ${idPark};
     `;
-    console.log("[tileModel] Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
+    console.log("[tileModel] Executando a instrução SQL: \n" + instrucaoSql1);
+    
+    let tiles = await database.executar(instrucaoSql1);
+    
+    for (let i = 0; i < tiles.length; i++) {
+        let tile = tiles[i];
+        if(!tile.idSpecies) continue;
+
+        const instrucaoSql2 = `
+            SELECT * FROM vw_dinosaurs 
+            WHERE idPark = ${idPark} 
+            AND positionRow = ${tile.positionRow} 
+            AND positionCol = ${tile.positionCol}
+        `;
+
+        const dinosaur = await database.executar(instrucaoSql2);
+        tile["dinosaur"] = dinosaur[0];
+    }
+
+    return tiles;
 }
 
 function update(idPark, positionRow, positionCol, fields = {}) {

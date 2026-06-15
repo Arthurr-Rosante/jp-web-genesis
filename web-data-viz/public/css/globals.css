@@ -1,0 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Courier+Prime:wght@400;700&display=swap');
+
+:root {
+    --background: #15120b;
+    --foreground: #d0c1a1;
+    --surface: #241b0a;
+
+    --primary: #e4aa27;
+    --primary-foreground: #edddb9;
+
+    --secondary: #647339;
+    --secondary-foreground: #e1f1b2;
+
+    --accent: #713832;
+    --accent-foreground: #f1b6af;
+
+    --text: #d0c1a1;
+    --text-muted: #9E8060;
+    --text-disabled: #6B4F2A;
+
+    --radius: 8px;
+    --border: #3c2906;
+    --input: #241b0a;
+
+    --success: #3e4a1b;
+    --success-foreground: #e1f1b2;
+
+    --warning: #805a03;
+    --warning-foreground: #edddb9;
+
+    --destructive: #82200d;
+    --destructive-foreground: #ecb7ad;
+}
+
+.muted {color: var(--text-muted);}
+.disabled {color: var(--text-disabled);}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text);
+    font-family: 'Playfair Display',  sans-serif;
+
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+ul,
+li {
+    list-style: none;
+}
+
+a {
+    color: var(--text);
+    text-decoration: none;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+input,
+textarea,
+select {
+    background-color: var(--input);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 8px 12px;
+    font-family: 'Courier Prime', monospace, sans-serif;
+}
+
+button {
+    font-family: 'Courier Prime', monospace, sans-serif;
+    background-color: var(--surface);
+    color: var(--foreground);
+
+    cursor: pointer;
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 700;
+    padding: 8px 16px;
+    border: 0px solid var(--border);
+}
+button:hover {
+    border-width: 2px;
+    font-style: italic;
+}
+
+.button--primary {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    border-color: var(--primary-foreground);
+}
+
+.button--secondary {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+    border-color: var(--secondary-foreground);
+}
+
+.button--accent {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+    border-color: var(--accent-foreground);
+}
+
+.card {
+    padding: 16px;
+    background-color: var(--surface);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.card--success {
+    background-color: var(--success);
+    color: var(--success-foreground);
+    border-color: var(--success-foreground);
+}
+.card--warning {
+    background-color: var(--warning);
+    color: var(--warning-foreground);
+    border-color: var(--warning-foreground);
+}
+.card--destructive {
+    background-color: var(--destructive);
+    color: var(--destructive-foreground);
+    border-color: var(--destructive-foreground);
+}
+
+.container {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    gap: 16px;
+    padding: 16px;
+}
+
+#toast-container {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 999 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    pointer-events: none;
+}
+
+.toast {
+    pointer-events: none;
+    width: max-content;
+    max-width: 320px;
+    min-width: 240px;
+    
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    
+    background-color: var(--surface); 
+    border: 1px solid; 
+    border-radius: 8px;   
+}
+
+.toast-content {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+}
+
+.toast-title {
+    font-size: 16px;
+}
+
+.toast-message {
+    font-size: 16px;
+}
+
+.toast--default {
+    border-color: var(--border);
+    color: var(--muted-foreground);
+}
+.toast--success {
+    background-color: var(--success);
+    border-color: var(--success-foreground);
+    color: var(--success-foreground);
+}
+.toast--warn {
+    background-color: var(--warning);
+    border-color: var(--warning-foreground);
+    color: var(--warning-foreground);
+}
+.toast--destructive {
+    background-color: var(--destructive);
+    border-color: var(--destructive-foreground);
+    color: var(--destructive-foreground);
+}

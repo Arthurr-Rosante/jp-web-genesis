@@ -5,8 +5,208 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JPWG | Página Inicial</title>
+  
+  <!-- ESTILOS CSS -->
+  <link rel="stylesheet" href="./css/globals.css">
+  <link rel="stylesheet" href="./css/index.css">
+
+  <!-- BIBLIOTECAS EXTERNAS -->
+  <script src="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/index.min.js"></script>
 </head>
-<body>
-  <h1>Hello World!</h1>
+<body onload="onPageLoad()">
+  <!-- Header -->
+  <div class="header">
+    <div class="container">
+      <h1 class="header-title"><a href="">JP Web Genesis</a></h1>
+      <nav class="navbar">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="#about-section">Sobre</a></li>
+          <li class="nav-item"><a href="#dinosaurs-section">Dinossauros</a></li>
+          <li class="nav-item"><a href="#buildings-section">Construções</a></li>
+          <li class="nav-item"><a href="#events-section">Eventos</a></li>
+        </ul>
+        <button class="cta-btn button--secondary">
+          <a href="./login.html">
+            <span>Acessar</span><i class="ph ph-caret-circle-right"></i>
+          </a>
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main container">
+    <!-- Hero -->
+    <div id="hero-section">
+      <div class="hero-text">
+        <h1>Crie Seu <br> Próprio <br> <span class="font-jurassic">Jurassic Park</span></h1>
+        <p>Tenha a chance de caminhar lado a lado com Dinossauros e construir seu Parque do <span>total zero!</span>. Mas tome cuidado, nem tudo é tão fácil como parece.</p>
+        <div class="cta-container">
+            <button class="button--secondary"><a href="./login.html">Entrar</a></button>
+            <button><a href="#dinosaurs-section">Ver Espécies</a></button>
+        </div>
+      </div>
+      <img src="./assets/images/hero-banner.png" alt="Parque dos Dinossauros">
+    </div>
+
+    <!-- Sobre -->
+    <div id="about-section">
+        <div class="section-header">
+            <h2>Sobre o Projeto</h2>
+            <p>O <span>Jurassic Park: Web Genesis</span> é um projeto desenvolvido como meio <span>avaliativo</span> para a matéria de <span>Pesquisa e Inovação</span> da SPTech. <br><br>
+            Para além de homenagear a franquia <span>Jurassic Park</span> — que me é tão cara —, este projeto tem como objetivo mostrar como, através do conhecimento técnico e do uso da programação como um <span>meio</span> você também pode transformar suas ideias em algo concreto e significativo, se não para o mundo, então, ao menos para você!
+            <br><br>
+            O projeto é um jogo no estilo <span>Park Builder</span>. Aqui, você vai contar com diversas construções e dinossauros para gerenciar o seu próprio Jurassic Park <span>— Sem poupar despesas!</span></p>
+        </div>
+        <img src="./assets/demonstrations/park-demonstration.png" alt="Imagem do Jogo">
+    </div>
+
+    <!-- Dinossauros -->
+    <div id="dinosaurs-section">
+      <div class="section-header">
+        <h2>Dinossauros Disponíveis</h2>
+        <p>O Jurassic Park: Web Genesis conta, atualmente, com uma gama de <span id="species-count">0 espécies</span> distintas para criar, conter e administrar em seu parque. Confira a lista abaixo</p>
+      </div>
+      <ul id="dinosaurs-list" class="section-list">
+        <!-- <li> dinamicamente carregado -->
+      </ul>
+    </div>
+
+    <!-- Construções -->
+    <div id="buildings-section">
+      <div class="section-header">
+        <h2>Construções Disponíveis</h2>
+        <p>Para conter criaturas com as quais estamos lidando, o seu parque precisará de uma estrutura formidável! Veja abaixo quais são as construções disponíveis em <span>JP: Web Genesis</span></p>
+      </div>
+      <ul id="buildings-list" class="section-list">
+        <!-- <li> dinamicamente carregado -->
+      </ul>
+    </div>
+
+    <!-- Eventos -->
+    <div id="events-section">
+      <div class="section-header">
+        <h2>Eventos</h2>
+        <p>Não importa o quanto tentemos controlar a natureza, a vida <span>sempre</span> encontra um meio. E é por isso que você deve estar preparado para qualquer tipo de imprevisto</p>
+      </div>
+      <ul id="events-list" class="section-list">
+        <!-- <li> dinamicamente carregado -->
+      </ul>
+    </div>
+  </div>
+  <!-- Footer -->
+  <div class="footer">
+    <div class="container">
+      <p><span>Jurassic Park Web Genesis</span> por: <a href="http://github.com/arthurr-rosante" target="_blank">Arthur Rocha Rosante | 1CCOB 2026.1</a></p>
+    </div>
+  </div>
+
+<!-- SCRIPTS -->
+<script src="./js/metadata.js"></script>
+<script src="./js/utils/format-dino-fields.js"></script>
+<script>
+  function onPageLoad() {
+    const dinosaurSectionList = document.getElementById("dinosaurs-list");
+    const buildingsectionList = document.getElementById("buildings-list");
+    const eventSectionList = document.getElementById("events-list");
+    const speciesCount = document.getElementById("species-count");
+
+    fetch("/api/species")
+    .then((res) => {
+      if(!res.ok) throw "Erro ao buscar espécies";
+      return res.json();
+    })
+    .then((data) => {
+      const {count, species} = data;
+
+      speciesCount.innerHTML = `${count} espécies`;
+      species.forEach((sp) => {
+        const speciesCard = document.createElement("li");
+        
+        speciesCard.classList.add("list-item");
+        speciesCard.innerHTML = speciesCardHTML(sp);
+        dinosaurSectionList.appendChild(speciesCard);
+      });
+    });
+
+    Object.keys(buildingsDataMap).forEach((key) => {
+      const buildingCard = document.createElement("li");
+        
+      buildingCard.classList.add("list-item");
+      buildingCard.innerHTML = buildingCardHTML(key);
+      buildingsectionList.appendChild(buildingCard);
+    });
+    
+    Object.keys(eventsDataMap).forEach((key) => {
+      const eventCard = document.createElement("li");
+        
+      eventCard.classList.add("list-item");
+      eventCard.innerHTML = eventCardHTML(key);
+      eventSectionList.appendChild(eventCard);
+    });
+  }
+
+  function speciesCardHTML(species) {
+    return `
+      <div class="item-image">
+        <img src="${speciesDataMap[species.name].iconUrl}" alt="${species.name} Ícone" class="species-img">
+        <img src="./assets/images/frame.png" alt="Frame" class="frame"> 
+      </div>
+      <div class="item-content">
+        <h3>Nome: <span>${species.name.charAt(0).toUpperCase() + species.name.slice(1)}</span></h3>
+        <div class="item-info">
+          <h3><i class="ph ph-info"></i> Informação</h3>
+          <ul>
+            <li>Era: <span>${species.temporalRange}</span></li>
+            <li>Locomoção: <span>${species.locomotionType}</span></li>
+            <li>Dieta: <span>${species.diet}</span></li>
+            <li>Altura: <span>${formatDinoHeight(Number(species.heightInMeters))}</span></li>
+            <li>Peso: <span>${formatDinoWeight(Number(species.weightInKilograms))}</span></li>
+            <li>Agressividade: <span>${formatDinoAggressiveness(species.aggressiveness)}</span></li>
+            <li>Custo de Incubação: <span>${species.hatchCost}</span></li>
+            <li>Chance de Eclosão: <span>${formatDinoHatchSuccess(species.hatchSuccessRate)}</span></li>
+          </ul>
+        </div>
+      </div>
+    `;
+  }
+
+  function buildingCardHTML(buildingName) {
+    const building = buildingsDataMap[buildingName];
+
+    return `
+      <img src="${building.spriteUrl}" alt="${buildingName} Ícone" class="building-img">
+      <div class="item-content">
+        <h3>Nome: <span>${building.translatedName}</span></h3>
+        <div class="item-info">
+          <h3><i class="ph ph-info"></i> Informação</h3>
+          <ul>
+              <li><span>Descrição:</span> ${building.description}</li>
+              <li><span>Utilidade:</span> ${building.purpose}</li>
+          </ul>
+        </div>
+      </div>
+    `;
+  }
+
+  function eventCardHTML(eventName) {
+    const event = eventsDataMap[eventName];
+
+    return `
+      <img src="${event.spriteUrl}" alt="${eventName} Ícone" class="event-img">
+      <div class="item-content">
+        <h3>Nome: <span>${event.translatedName}</span></h3>
+        <div class="item-info">
+          <h3><i class="ph ph-info"></i> Informação</h3>
+          <ul>
+            <li><span>Descrição:</span> ${event.description}</li>
+            <li><span>Consequência(s):</span> ${event.consequences}</li>
+            <li><span>Chance de Ocorrer:</span> ${formatDinoHatchSuccess(event.spawnChance)}</li>
+          </ul>
+        </div>
+      </div>`;
+  }
+
+</script>
 </body>
 </html>

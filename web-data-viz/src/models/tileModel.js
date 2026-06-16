@@ -34,7 +34,32 @@ async function getAllByParkId(idPark) {
     return tiles;
 }
 
-function updateOne(idPark, positionRow, positionCol, fields = {}) {
+async function getOneByParkId(idPark, positionRow, positionCol) {
+    var instrucaoSql1 = `
+    SELECT * FROM vw_tiles 
+    WHERE idPark = ${idPark} 
+    AND positionRow = ${positionRow} 
+    AND positionCol = ${positionCol}
+    `;
+    console.log("[tileModel] Executando a instrução SQL: \n" + instrucaoSql1);
+    
+    let tile = await database.executar(instrucaoSql1);
+    if(tile.idSpecies) {
+        const instrucaoSql2 = `
+            SELECT * FROM vw_dinosaurs 
+            WHERE idPark = ${idPark} 
+            AND positionRow = ${tile.positionRow} 
+            AND positionCol = ${tile.positionCol}
+        `;
+    
+        const dinosaur = await database.executar(instrucaoSql2);
+        tile["dinosaur"] = dinosaur[0];
+    };
+
+    return tile;
+}
+
+async function updateOne(idPark, positionRow, positionCol, fields = {}) {
     let fieldKeys = Object.keys(fields);
     if(fieldKeys.length < 1) return;
 
@@ -43,21 +68,30 @@ function updateOne(idPark, positionRow, positionCol, fields = {}) {
 
     var instrucaoSql = `
         UPDATE tile SET ${treatedFields} WHERE idPark = ${idPark} AND positionRow = ${positionRow} AND positionCol = ${positionCol};
-    `;
+    `;   
     console.log("[tileModel] Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
+    const updateResult = await database.executar(instrucaoSql);
+
+    return getOneByParkId(idPark, positionRow, positionCol);
 }
 
 async function updateMany(idPark, tiles) {
+    const updatedTiles = [];
+
     for (let i = 0; i < tiles.length; i++) {
         const tile = tiles[i];
-        await updateOne(idPark, tile.positionRow, tile.positionCol, tile.fields);
+        const updated = await updateOne(idPark, tile.positionRow, tile.positionCol, tile.fields)
+        .then((result) => result[0]);
+        updatedTiles.push(updated);
     }
+
+    return updatedTiles;
 }
 
 module.exports = {
     create,
     getAllByParkId,
+    getOneByParkId,
     updateOne,
     updateMany
 };

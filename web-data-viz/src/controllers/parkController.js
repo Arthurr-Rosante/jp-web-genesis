@@ -69,7 +69,7 @@ function update(req, res) {
         };
 
         parkModel.update(idUser, fieldsToUpdate)
-        .then((result) => res.status(200).send({message: "Parque atualizado com sucesso!"}))
+        .then((result) => res.status(200).send({message: "Parque atualizado com sucesso!", updated: result[0]}))
         .catch((error) => {
             console.error("[parkController] Erro: ", error);
             res.status(500).json({error: error.sqlMessage});

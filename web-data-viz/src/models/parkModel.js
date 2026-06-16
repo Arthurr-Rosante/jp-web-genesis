@@ -16,7 +16,7 @@ function getOneById(idUser) {
     return database.executar(instrucaoSql);
 }
 
-function update(idUser, fields = {}) {
+async function update(idUser, fields = {}) {
     let fieldKeys = Object.keys(fields);
     if(fieldKeys.length < 1) return;
 
@@ -26,8 +26,11 @@ function update(idUser, fields = {}) {
     var instrucaoSql = `
         UPDATE park SET ${treatedFields} WHERE idUser = ${idUser};
     `;
+    
     console.log("[parkModel] Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
+    const updateResult = await database.executar(instrucaoSql)
+
+    return getOneById(idUser);  // retorna Parque atualizado
 }
 
 module.exports = {

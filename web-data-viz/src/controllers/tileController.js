@@ -50,7 +50,7 @@ function getAllByParkId(req, res) {
     }
 }
 
-function update(req, res) {
+function updateOne(req, res) {
     const fieldsToUpdate = {};
     const {idPark} = req.params;
     const {positionRow, positionCol} = req.query;
@@ -63,13 +63,13 @@ function update(req, res) {
     } else if(idBuilding == undefined && idSpecies == undefined && currentHp == undefined && maxHp == undefined && removable == undefined) {
         res.status(400).send({message: "Nenhum campo foi alterado!"});
     } else {
-        if(idBuilding) fieldsToUpdate["idBuilding"] = idBuilding;
+        if(idBuilding !== null) fieldsToUpdate["idBuilding"] = idBuilding;
         if(idSpecies || idSpecies === null) fieldsToUpdate["idSpecies"] = idSpecies;
-        if(currentHp) fieldsToUpdate["currentHp"] = currentHp;
-        if(maxHp) fieldsToUpdate["maxHp"] = maxHp;
-        if(removable) fieldsToUpdate["removable"] = removable;
+        if(currentHp !== null) fieldsToUpdate["currentHp"] = currentHp;
+        if(maxHp !== null) fieldsToUpdate["maxHp"] = maxHp;
+        if(removable !== null) fieldsToUpdate["removable"] = removable;
 
-        tileModel.update(idPark, positionRow, positionCol, fieldsToUpdate)
+        tileModel.updateOne(idPark, positionRow, positionCol, fieldsToUpdate)
         .then((result) => res.status(200).send({message: "Tile atualizado com sucesso!"}))
         .catch((error) => {
             console.error("[tileController] Erro: ", error);
@@ -78,8 +78,47 @@ function update(req, res) {
     }
 }
 
+function updateMany(req, res) {
+    const {idPark} = req.params;
+    const {tiles} = req.body;
+    
+    if (idPark == undefined) {
+        res.status(400).send({message: "Seu idPark está undefined!"});
+    } else if(tiles.length <= 0) {
+        res.status(200).send({message: "Nenhum Tile foi enviado para atualização!"});
+    } else {
+        let tilesToUpdate = [];
+
+        for (let i = 0; i < tiles.length; i++) {
+            let fieldsToUpdate = {};
+            const tile = tiles[i];
+            if(tile.positionRow == undefined || tile.positionCol == undefined) continue;
+            
+            if(tile.idBuilding !== null) fieldsToUpdate["idBuilding"] = tile.idBuilding;
+            if(tile.idSpecies || tile.idSpecies === null) fieldsToUpdate["idSpecies"] = tile.idSpecies;
+            if(tile.currentHp !== null) fieldsToUpdate["currentHp"] = tile.currentHp;
+            if(tile.maxHp !== null) fieldsToUpdate["maxHp"] = tile.maxHp;
+            if(tile.removable !== null) fieldsToUpdate["removable"] = tile.removable;
+
+            tilesToUpdate.push({
+                positionRow: tile.positionRow,
+                positionCol: tile.positionCol,
+                fields: fieldsToUpdate
+            });
+        }
+
+        tileModel.updateMany(idPark, tilesToUpdate)
+        .then((result) => res.status(200).send({message: "Tiles atualizados com sucesso!"}))
+        .catch((error) => {
+            console.error("[tileController] Erro: ", error);
+            res.status(500).json({error: error.sqlMessage});
+        });
+    }
+}
+
 module.exports = {
     create,
     getAllByParkId,
-    update
+    updateOne,
+    updateMany
 }

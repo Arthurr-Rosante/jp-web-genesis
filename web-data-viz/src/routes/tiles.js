@@ -12,7 +12,11 @@ router.get("/:idPark", function (req, res) {
 });
 
 router.put("/:idPark", function (req, res) {
-    tileController.update(req, res);
+    if(req.body.tiles) {
+        tileController.updateMany(req, res);
+    } else {
+        tileController.updateOne(req, res);
+    }
 });
 
 module.exports = router;

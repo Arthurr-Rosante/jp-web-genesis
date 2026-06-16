@@ -34,7 +34,7 @@ async function getAllByParkId(idPark) {
     return tiles;
 }
 
-function update(idPark, positionRow, positionCol, fields = {}) {
+function updateOne(idPark, positionRow, positionCol, fields = {}) {
     let fieldKeys = Object.keys(fields);
     if(fieldKeys.length < 1) return;
 
@@ -48,8 +48,16 @@ function update(idPark, positionRow, positionCol, fields = {}) {
     return database.executar(instrucaoSql);
 }
 
+async function updateMany(idPark, tiles) {
+    for (let i = 0; i < tiles.length; i++) {
+        const tile = tiles[i];
+        await updateOne(idPark, tile.positionRow, tile.positionCol, tile.fields);
+    }
+}
+
 module.exports = {
     create,
     getAllByParkId,
-    update
+    updateOne,
+    updateMany
 };

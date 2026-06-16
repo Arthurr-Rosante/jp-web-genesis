@@ -126,7 +126,7 @@ function register(req, res) {
                                 tileModel.create(idUser, rowId, colId, idBuilding)
                                 .then((tilResult) => {
                                     if(rowId === 2 && colId === 3) {
-                                        tileModel.update(idUser, 2, 3, {
+                                        tileModel.updateOne(idUser, 2, 3, {
                                             idSpecies: 6,                       // id da espécie parassaurolofo
                                             removable: 0
                                         });

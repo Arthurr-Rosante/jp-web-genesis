@@ -1,0 +1,223 @@
+:root {
+    --tile-w: 140px; 
+    --tile-h: 140px;
+}
+
+html {
+    overflow: hidden;
+}
+
+body {
+    position: relative;
+    background-color: var(--secondary-foreground);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Sidebar */
+#sidebar {
+    position: absolute;
+    top: 25%;
+    left: 0;
+    z-index: 998;
+
+    max-width: 320px;
+    width: fit-content;
+    height: fit-content;
+    
+    background-color: var(--background);
+    border: 2px solid var(--primary);
+    border-left: none;
+    border-radius: 0 16px 16px 0;
+    padding: 32px 16px 32px 8px;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    row-gap: 16px;
+}
+
+#sidebar-toggler {
+    position: absolute;
+    top: 20px;
+
+    background-color: var(--surface);
+    color: var(--foreground);
+    font-size: 20px;
+    
+    border: 1px solid var(--border);
+    padding: 4px;
+
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.sidebar-header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 0 16px 0;
+}
+
+.sidebar-header .logo {
+    color: var(--primary);
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+}
+
+.sidebar-body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 32px;
+}
+
+.sidebar-body .sidebar-item,
+.sidebar-footer #logout-btn {
+    width: 100%;
+    background-color: var(--surface);
+    color: var(--foreground);
+    font-weight: normal;
+
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    column-gap: 8px;
+}
+.sidebar-body .sidebar-item:hover,
+#sidebar-toggler:hover {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+}
+
+.sidebar-body .sidebar-item.active {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+}
+
+
+#autosave-btn {
+    color: var(--success-foreground);
+    background-color: var(--success);
+}
+#autosave-btn:hover {
+    color: var(--success);
+    background-color: var(--success-foreground);
+}
+
+.sidebar-footer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.sidebar-footer #logout-btn {
+    justify-content: center;
+}
+.sidebar-footer #logout-btn:hover {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+}
+
+#sidebar.closed .sidebar-header .logo span,
+#sidebar.closed .sidebar-body .sidebar-item p,
+#sidebar.closed .sidebar-footer #logout-btn p
+{
+    display: none;
+}
+
+#sidebar.open .sidebar-header .logo span,
+#sidebar.open .sidebar-body .sidebar-item p,
+#sidebar.open .sidebar-footer #logout-btn p
+{
+    display: block;
+}
+
+/* Statusbar */
+#statusbar {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 998;
+
+    max-width: 35vw;
+    width: 100%;
+
+    background-color: var(--background);
+    border: 2px solid var(--primary);
+    border-bottom: none;
+    border-right: none;
+    border-radius: 16px 0 0 0;
+    padding: 8px 32px 16px 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    column-gap: 1.5rem;
+}
+
+#statusbar p,
+#statusbar #park-rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--text-muted);
+}
+#statusbar #park-rating {
+    gap: 0px;
+}
+
+#statusbar p:hover i,
+#statusbar span:hover i {
+    color: var(--primary);
+}
+
+/* Tiles */
+#grid {
+    max-width: calc(var(--tile-w) * 5);
+    max-height: calc(var(--tile-h) * 4);
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tile {
+    background-color: red;
+    position: relative;
+    width: var(--tile-w);
+    height: var(--tile-w);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    opacity: 0.7;
+    cursor: pointer;
+    pointer-events: auto;
+    border-radius: 6px;
+}
+
+.tile:hover {
+    opacity: 1;
+}
+
+.tile--selected {
+    z-index: 999 !important;
+}
+
+.rain {
+    background-image: url("../assets/images/rain.gif");
+    background-size: contain;
+    background-repeat: repeat;
+    background-position: center;
+    pointer-events: none;
+
+    position: absolute;
+    inset: 0;
+    z-index: 997;
+}

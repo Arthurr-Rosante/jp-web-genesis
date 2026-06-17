@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jurassic Park: Web Genesis</title>
+  
+    <!-- ESTILOS CSS -->
+    <link rel="stylesheet" href="./css/globals.css">
+    <link rel="stylesheet" href="./css/park.css">
+    <link rel="stylesheet" href="./css/panel.css">
+    <link rel="stylesheet" href="./css/panels/tile-switcher.css">
+    <link rel="stylesheet" href="./css/panels/entrance.css">
+    <link rel="stylesheet" href="./css/panels/general.css">
+    <link rel="stylesheet" href="./css/panels/hatchery.css">
+    <link rel="stylesheet" href="./css/panels/enclosure.css">
+
+    <!-- BIBLIOTECAS EXTERNAS -->
+    <script src="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body onload="onPageLoad()">
+    <div id="rain-panel"></div>
+
+    <!-- SideBar -->
+    <div id="sidebar" class="closed">
+        <button id="sidebar-toggler" onclick="togglePanel('sidebar', false)">
+            <i class="ph-fill ph-caret-circle-right"></i>
+        </button>
+        <div class="sidebar-header">
+            <h3 class="logo">
+                <span>Jurassic Park</span>
+                <span>Web Genesis</span>
+            </h3>
+        </div>
+        <div class="sidebar-body">
+            <button id="general-panel-toggler" class="sidebar-item" onclick="togglePanel('general-panel')">
+                <i class="ph-fill ph-binoculars"></i>
+                <p>Visão Geral</p>
+            </button>
+            <button id="editor-mode-toggler" class="sidebar-item" onclick="toggleEditorMode(this)">
+                <i class="ph-fill ph-hammer"></i>
+                <p>Modo Editor</p>
+            </button>
+            <button id="autosave-btn" class="sidebar-item" onclick="events.save()">
+                <i class="ph-fill ph-floppy-disk"></i>
+                <p>Salvar</p>
+            </button>
+        </div>
+        <div class="sidebar-footer">
+            <button id="logout-btn" onclick="logout()">
+                <i class="ph-fill ph-sign-out"></i>
+                <p>Sair</p>
+            </button>
+        </div>
+    </div>
+
+    <!-- StatusBar -->
+    <div id="statusbar">
+        <p><i class="ph-fill ph-info"></i><span id="park-name">Parque de Usuário</span></p>
+        <span id="park-rating">
+            <i class="ph ph-star"></i>
+            <i class="ph ph-star"></i>
+            <i class="ph ph-star"></i>
+            <i class="ph ph-star"></i>
+            <i class="ph ph-star"></i>
+        </span>
+        <p><i class="ph-fill ph-coins"></i><span id="park-balance">0.0</span></p>
+    </div>
+
+    <!-- Grid (5x4) -->
+    <div id="grid"></div>
+
+    <!-- Painel Entrada -->
+    <div class="overlay closed" onclick="closeOverlay(event)">
+        <div id="entrance-panel" class="panel">
+            <h3 class="panel-title">Portão de Entrada</h3>
+            <form id="park-name-form">
+                <label for="ipt-park-name">Mudar o nome do Parque</label>
+                <input id="ipt-park-name" type="text" placeholder="ex: Jurassic Park" required>
+                <button id="park-name-btn" type="submit" class="button--primary">Alterar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Painel Centro de Visitantes -->
+    <div class="overlay closed" onclick="closeOverlay(event)">
+        <div id="general-panel" class="panel">
+            <h3 class="panel-title">Visao Geral do Parque</h3>
+        </div>
+    </div>
+
+    <!-- Painel Incubadora -->
+    <div class="overlay closed" onclick="closeOverlay(event)">
+        <div id="hatchery-panel" class="panel">
+            <h3 class="panel-title">Laboratório de Incubação</h3>
+            <div id="hatchery-slots">
+                <div id="slot-1" class="hatchery-slot slot-empty"></div>
+                <div id="slot-2" class="hatchery-slot slot-empty"></div>
+                <div id="slot-3" class="hatchery-slot slot-empty"></div>
+            </div>
+            <ul id="hatchery-list">
+                <!-- carregado dinâmicamente... -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Painel Cercado -->
+    <div class="overlay closed" onclick="closeOverlay(event)">
+        <div id="enclosure-panel" class="panel">
+            <!-- carregado dinâmicamente... -->
+        </div>
+    </div>
+
+    <!-- Tile Switcher -->
+    <div class="overlay closed" onclick="closeOverlay(event)">
+        <div id="tile-switcher">
+            <ul id="tile-list">
+                <!-- carregado dinâmicamente... -->
+            </ul>
+            <div class="tile-actions">
+                <button id="change-tile-btn" class="button--secondary" onclick="changeTile()">trocar <i class="ph-fill ph-swap"></i></button>
+                <button id="remove-tile-btn" class="button--accent" onclick="removeTile()">remover <i class="ph-fill ph-x-circle"></i></button>
+            </div>
+        </div>
+    </div>
+
+<!-- SCRIPTS - Utilitários -->
+<script src="./js/utils/storage.js"></script>
+<script src="./js/utils/toggler.js"></script>
+<script src="./js/utils/events.js"></script>
+<script src="./js/utils/timer.js"></script>
+<script src="./js/utils/toast.js"></script>
+<script src="./js/metadata.js"></script>
+<!-- SCRIPTS - Loaders -->
+<script src="./js/loaders/grid.js"></script>
+<script src="./js/loaders/statusbar.js"></script>
+<script src="./js/loaders/enclosure.js"></script>
+<script src="./js/loaders/switcher.js"></script>
+<script src="./js/loaders/hatchery.js"></script>
+<script src="./js/loaders/general.js"></script>
+<script>
+    // Variáveis Globais
+    const AUTOSAVE_ENABLED = true;
+    const AUTOSAVE_INTERVAL_MS = 1 * 60 * 1000;
+    
+    const INCREASE_BALANCE_ENABLED = true;
+    const INCREASE_BALANCE_INTERVAL_MS = 1 * 5 * 1000;
+    const BASE_INCREASE_AMOUNT = 5;
+    
+    const EVENTS_ENABLED = true;
+    const EVENTS_INTERVAL_MS = 1 * 30 * 1000;
+
+    function onPageLoad() {
+        // Redireciona caso não esteja logado
+        if(!storage.get("JPWG_DATA")) {
+            window.location = "./login.html";
+        }
+
+        storage.set("JPWG_EDITOR_MODE", false);
+        
+        // Carrega UI
+        loadGameUI();
+        
+        // Inicializa Timers
+        const autosaveTimer = createTimer("autosave", () => {
+            if(!AUTOSAVE_ENABLED) return;
+            events.save();
+        }, AUTOSAVE_INTERVAL_MS);
+
+        const balanceTimer = createTimer("increaseBalance", () => {
+            if(!INCREASE_BALANCE_ENABLED) return;
+            events.increaseBalance();
+        }, INCREASE_BALANCE_INTERVAL_MS);
+
+        const eventTimer = createTimer("events", () => {
+            if(!EVENTS_ENABLED) return;
+            events.randomEvent();
+        }, EVENTS_INTERVAL_MS);
+    }
+
+    // Funções Utilitárias
+    function logout() {
+        activeTimers.forEach((key) => {
+            key.destroy();
+        });
+
+        storage.clear();
+        setTimeout(() => {
+            window.location = "./login.html";
+        }, 250);
+    }
+
+    function closeOverlay(event) {
+        if (event.currentTarget === event.target) {
+            event.target.classList.replace("open", "closed");
+        }
+    }
+
+    function toggleEditorMode(element) {
+        const currentMode = storage.get("JPWG_EDITOR_MODE") || false;
+        storage.set("JPWG_EDITOR_MODE", !currentMode);
+
+        element.classList.toggle("active");
+    }
+
+    function loadGameUI() {
+        loadGrid();
+        loadStatusbar();
+    }
+</script>
+</body>
+</html>

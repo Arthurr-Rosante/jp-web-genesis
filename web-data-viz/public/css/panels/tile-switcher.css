@@ -1,0 +1,110 @@
+#tile-switcher {
+    position: absolute;
+    top: 50%;
+    right: 2%;
+    transform: translateY(-50%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 16px;
+
+    height: 600px;
+    width: 220px;
+    background-color: var(--background);
+    border: 1px solid var(--primary);
+    border-radius: 16px;
+
+    z-index: 999 !important;
+}
+
+#tile-switcher #tile-list {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    row-gap: 8px;
+    padding: 8px;
+    overflow-y: auto;
+}
+
+#tile-list .tile-item {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 8px;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0.7;
+}
+
+#tile-list .tile-item:hover {
+   opacity: 1;
+}
+
+#tile-list .tile-item.selected { 
+    background-color: var(--secondary);
+    border: 4px dashed var(--secondary-foreground);
+    user-select: none; 
+    pointer-events: none; 
+}
+
+.tile-item .tile-header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+#tile-list .tile-item img {
+    max-width: 100px;
+    width: 100%;
+    height: auto;
+    padding: 4px;
+
+    background-color: var(--secondary);
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+}
+.tile-item .tile-footer {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+}
+.tile-item .tile-footer .tile-price {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+.tile-item .tile-footer .tile-price i { color: var(--primary); }
+
+.tile-actions {
+    position: absolute;
+    bottom: 0;
+    left: -33%;
+    transform: translateX(-50%);
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    row-gap: 12px;
+}
+
+.tile-actions button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 120px;
+}
+
+#change-tile-btn i,
+#remove-tile-btn i { font-size: 20px; }

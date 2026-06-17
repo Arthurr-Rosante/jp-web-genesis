@@ -129,7 +129,7 @@
       });
     });
 
-    Object.keys(buildingsDataMap).forEach((key) => {
+    Object.keys(shortenedBuildingsDataMap).forEach((key) => {
       const buildingCard = document.createElement("li");
         
       buildingCard.classList.add("list-item");
@@ -172,7 +172,7 @@
   }
 
   function buildingCardHTML(buildingName) {
-    const building = buildingsDataMap[buildingName];
+    const building = shortenedBuildingsDataMap[buildingName];
 
     return `
       <img src="${building.spriteUrl}" alt="${buildingName} Ícone" class="building-img">

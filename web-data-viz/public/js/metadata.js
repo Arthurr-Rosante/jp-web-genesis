@@ -66,6 +66,65 @@ const speciesDataMap = {
 const buildingsDataMap = {
     "entrance":{
         translatedName: "Portão de Entrada",
+        spriteUrl: imagesPath + "/buildings/entrance.png"
+    },
+    "visitor-center":{
+        translatedName: "Centro de Visitantes",
+        spriteUrl: imagesPath + "/buildings/visitor-center.png"
+    },
+    "enclosure-1":{
+        translatedName: "Cercado",
+        spriteUrl: imagesPath + "/enclosures/enclosure-1.png"
+    },
+    "enclosure-2":{
+        translatedName: "Cercado Melhorado",
+        spriteUrl: imagesPath + "/enclosures/enclosure-2.png"
+    },
+    "enclosure-3":{
+        translatedName: "Cercado Superior",
+        spriteUrl: imagesPath + "/enclosures/enclosure-3.png"
+    },
+    "hatchery":{   
+        translatedName: "Laboratório de Incubação",
+        spriteUrl: imagesPath + "/buildings/hatchery.png"
+    },
+    "terrain-grass":{
+        translatedName: "Terreno Mata",
+        spriteUrl: imagesPath + "/terrains/terrain-grass.png"
+    },
+    "terrain-dirt":{
+        translatedName: "Terreno Baldio",
+        spriteUrl: imagesPath + "/terrains/terrain-dirt.png"
+    },
+    "terrain-pond":{
+        translatedName: "Terreno Lagoa",
+        spriteUrl: imagesPath + "/terrains/terrain-pond.png"
+    },
+    "terrain-trees":{
+        translatedName: "Terreno Floresta",
+        spriteUrl: imagesPath + "/terrains/terrain-trees.png"
+    },
+    "path":{
+        translatedName: "Caminho",
+        spriteUrl: imagesPath + "/paths/path.png"
+    },
+    "path-l":{
+        translatedName: "Caminho L",
+        spriteUrl: imagesPath + "/paths/path-L.png"
+    },
+    "path-t":{
+        translatedName: "Caminho T",
+        spriteUrl: imagesPath + "/paths/path-T.png"
+    },
+    "path-cross":{
+        translatedName: "Caminho +",
+        spriteUrl: imagesPath + "/paths/path-cross.png"
+    }
+};
+
+const shortenedBuildingsDataMap = {
+    "entrance":{
+        translatedName: "Portão de Entrada",
         description: "Este portão de proporções colossais é como um bastião que guarda a entrada do seu Parque. Não há nada dentro da ilha (humano ou dinossauro) que não tenha passado por ele.",
         "purpose": "Permite trocar o nome do Parque.",
         spriteUrl: imagesPath + "/buildings/entrance.png"

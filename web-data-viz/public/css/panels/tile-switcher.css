@@ -47,7 +47,7 @@
    opacity: 1;
 }
 
-#tile-list .tile-item.selected { 
+#tile-list .tile-item--selected { 
     background-color: var(--secondary);
     border: 4px dashed var(--secondary-foreground);
     user-select: none; 

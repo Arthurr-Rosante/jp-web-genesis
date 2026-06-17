@@ -61,7 +61,7 @@ function updateOne(req, res) {
     } else if(positionRow == undefined || positionCol == undefined) {
         res.status(400).send({message: "Sua posição está undefined!"});
     } else if(idBuilding == undefined && idSpecies == undefined && currentHp == undefined && maxHp == undefined && removable == undefined) {
-        res.status(400).send({message: "Nenhum campo foi alterado!"});
+        res.status(400).send({error: "Nenhum campo foi alterado!"});
     } else {
         if(idBuilding !== null) fieldsToUpdate["idBuilding"] = idBuilding;
         if(idSpecies || idSpecies === null) fieldsToUpdate["idSpecies"] = idSpecies;

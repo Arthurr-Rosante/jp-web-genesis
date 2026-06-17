@@ -43,7 +43,7 @@ function update(req, res) {
     if (idUser == undefined) {
         res.status(400).send({message: "Seu idUser está undefined!"});
     } else if(name == undefined && rating == undefined && balance == undefined) {
-        res.status(200).send({message: "Nenhum campo foi alterado!"});
+        res.status(400).send({error: "Nenhum campo foi alterado!"});
     }
     else {
         if(name != undefined && name != "") fieldsToUpdate["name"] = name;

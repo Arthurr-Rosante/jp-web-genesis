@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS building(
     durability INT NOT NULL DEFAULT 0,
     baseCost INT NOT NULL DEFAULT 0,
     upgradeCost INT NULL,
-    maxUnits INT NULL,
+    placeable TINYINT NOT NULL DEFAULT 1,
     
     PRIMARY KEY (id),
     CONSTRAINT fkBuildingBuilding FOREIGN KEY (idUpgrade) REFERENCES building(id),
@@ -159,32 +159,32 @@ VALUES
         'herbívoro', 0.6, 250, 0.6, 1.5
     );
 
-INSERT INTO building (idUpgrade, name, category, durability, baseCost, maxUnits, upgradeCost) 
+INSERT INTO building (idUpgrade, name, category, durability, baseCost, placeable, upgradeCost) 
 VALUES
 	-- | TERRENO | --
 	(
         null,
 		'terrain-grass',
         'terrain', 
-        default, 10, null, null
+        default, 10, default, null
     ),
 	(
         null,
 		'terrain-trees',
         'terrain',
-        default, 10, null, null
+        default, 10, default, null
     ),
 	(
         null,
 		'terrain-dirt',
         'terrain',
-        default, 10, null, null
+        default, 10, default, null
     ),
 	(
         null,
 		'terrain-pond',
         'terrain',
-        default, 10, null, null
+        default, 10, default, null
     ),
     
 	-- | CAMINHO | --
@@ -192,63 +192,63 @@ VALUES
         null,
 		'path',
         'path',
-        default, 50, null, null
+        default, 50, default, null
     ),
 	(
         null,
 		'path-l',
         'path',
-        default, 50, null, null
+        default, 50, default, null
     ),
 	(
         null,
 		'path-t',
         'path',
-        default, 50, null, null
+        default, 50, default, null
     ),
 	(
         null,
 		'path-cross',
         'path',
-        default, 50, null, null
+        default, 50, default, null
     ),
 	-- | CERCADOS | --
 	(
         null,
 		'enclosure-1',
         'enclosure',
-        1, 100, null, 150
+        1, 100, default, 150
     ),
 	(
         null,
 		'enclosure-2',
         'enclosure',
-        5, 250, null, 350
+        5, 250, 0, 350
     ),
 	(
         null,
 		'enclosure-3',
         'enclosure',
-        10, 500, null, null
+        10, 500, 0, null
     ),
 	-- | CONSTRUÇÕES | --
 	(
         null,
 		'entrance',
         'building',
-        default, 0, 1, null
+        default, 0, 0, null
     ),
 	(
         null,
 		'visitor-center',
         'building',
-        default, 0, 1, null
+        default, 0, 0, null
     ),
 	(
         null,
 		'hatchery',
         'building',
-        default, 250, null, null
+        default, 250, default, null
     );
 
 UPDATE building SET idUpgrade = 10 WHERE name = 'enclosure-1';

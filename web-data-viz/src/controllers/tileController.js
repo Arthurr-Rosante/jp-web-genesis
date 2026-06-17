@@ -108,7 +108,19 @@ function updateMany(req, res) {
         }
 
         tileModel.updateMany(idPark, tilesToUpdate)
-        .then((result) => res.status(200).send({message: "Tiles atualizados com sucesso!", updated: result}))
+        .then((updateResult) => {
+            tileModel.getAllByParkId(idPark)
+            .then((tilesResult) => res.status(200).send({
+                message: "Tiles atualizados com sucesso!",
+                count: updateResult.length,
+                updated: updateResult,
+                tiles: tilesResult
+            }))
+            .catch((error) => {
+                console.error("[tileController] Erro: ", error);
+                res.status(500).json({error: error.sqlMessage});
+            });
+        })
         .catch((error) => {
             console.error("[tileController] Erro: ", error);
             res.status(500).json({error: error.sqlMessage});

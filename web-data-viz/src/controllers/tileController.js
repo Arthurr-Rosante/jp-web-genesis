@@ -63,11 +63,11 @@ function updateOne(req, res) {
     } else if(idBuilding == undefined && idSpecies == undefined && currentHp == undefined && maxHp == undefined && removable == undefined) {
         res.status(400).send({error: "Nenhum campo foi alterado!"});
     } else {
-        if(idBuilding !== null) fieldsToUpdate["idBuilding"] = idBuilding;
+        if(idBuilding !== undefined) fieldsToUpdate["idBuilding"] = idBuilding;
         if(idSpecies || idSpecies === null) fieldsToUpdate["idSpecies"] = idSpecies;
-        if(currentHp !== null) fieldsToUpdate["currentHp"] = currentHp;
-        if(maxHp !== null) fieldsToUpdate["maxHp"] = maxHp;
-        if(removable !== null) fieldsToUpdate["removable"] = removable;
+        if(currentHp !== undefined) fieldsToUpdate["currentHp"] = currentHp;
+        if(maxHp !== undefined) fieldsToUpdate["maxHp"] = maxHp;
+        if(removable !== undefined) fieldsToUpdate["removable"] = removable;
 
         tileModel.updateOne(idPark, positionRow, positionCol, fieldsToUpdate)
         .then((result) => res.status(200).send({message: "Tile atualizado com sucesso!", updated: result[0]}))
@@ -94,11 +94,11 @@ function updateMany(req, res) {
             const tile = tiles[i];
             if(tile.positionRow == undefined || tile.positionCol == undefined) continue;
             
-            if(tile.idBuilding !== null) fieldsToUpdate["idBuilding"] = tile.idBuilding;
+            if(tile.idBuilding !== undefined) fieldsToUpdate["idBuilding"] = tile.idBuilding;
             if(tile.idSpecies || tile.idSpecies === null) fieldsToUpdate["idSpecies"] = tile.idSpecies;
-            if(tile.currentHp !== null) fieldsToUpdate["currentHp"] = tile.currentHp;
-            if(tile.maxHp !== null) fieldsToUpdate["maxHp"] = tile.maxHp;
-            if(tile.removable !== null) fieldsToUpdate["removable"] = tile.removable;
+            if(tile.currentHp !== undefined) fieldsToUpdate["currentHp"] = tile.currentHp;
+            if(tile.maxHp !== undefined) fieldsToUpdate["maxHp"] = tile.maxHp;
+            if(tile.removable !== undefined) fieldsToUpdate["removable"] = tile.removable;
 
             tilesToUpdate.push({
                 positionRow: tile.positionRow,

@@ -30,21 +30,21 @@ function loadGrid() {
 
 function onTileClick(tile) {
     if(storage.get("JPWG_EDITOR_MODE")) {
-        loadTileSwitcher(tile);
-        togglePanel("tile-switcher");
+        togglePanel("tile-switcher", {onToggle: () => {
+            loadTileSwitcher(tile);
+        }});
         return;
     }
 
     if(tile.name === "entrance") {
         togglePanel("entrance-panel");
     } else if (tile.name === "visitor-center") {
-        loadGeneral();
-        togglePanel("general-panel");
+        togglePanel("general-panel", {onToggle: loadGeneral});
     } else if (tile.name === "hatchery") {
-        loadHatchery();
-        togglePanel("hatchery-panel");
+        togglePanel("hatchery-panel", {onToggle: loadHatchery});
     } else if (tile.category === "enclosure") {
-        loadEnclosure(tile);
-        togglePanel("enclosure-panel");
+        togglePanel("enclosure-panel", {onToggle: () => {
+            loadEnclosure(tile);
+        }});
     }
 }

@@ -1,8 +1,13 @@
-function togglePanel(elementId, withOverlay = true) {
+function togglePanel(
+    elementId, 
+    { withOverlay = true, onToggle = () => {} } = {}
+) {
     let element = document.getElementById(elementId);
     if(withOverlay) {
         element = element.closest(".overlay");
     }
+
+    if(onToggle && typeof onToggle === "function") onToggle();
 
     const icon = document.querySelector(`#${elementId}-toggler i`);
     const isOpen = element.classList.contains("open");

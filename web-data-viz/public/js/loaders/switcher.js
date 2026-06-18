@@ -77,7 +77,8 @@ async function loadTileSwitcher(selectedTile) {
             // classList[1], pois: ['tile-item', 'tile-name', 'tile--selected']
             const selectedOptData = buildings.find((b) => b.name === selectedOpt.classList[1]);
             await changeTile(selectedTile, selectedOptData);
-            togglePanel("tile-switcher");
+            
+            togglePanel("tile-switcher", {onToggle: cleanSelectedTiles});
         }
     }
     
@@ -97,7 +98,8 @@ async function loadTileSwitcher(selectedTile) {
             }
 
             await changeTile(selectedTile, terrainGrass);
-            togglePanel("tile-switcher");
+
+            togglePanel("tile-switcher", {onToggle: cleanSelectedTiles});
         }
     }
     

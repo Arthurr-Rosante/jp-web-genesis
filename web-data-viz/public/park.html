@@ -76,7 +76,7 @@
     <div class="overlay closed" onclick="closeOverlay(event)">
         <div id="entrance-panel" class="panel">
             <h3 class="panel-title">Portão de Entrada</h3>
-            <form id="park-name-form">
+            <form id="park-name-form" onsubmit="submitEntranceForm(event)">
                 <label for="ipt-park-name">Mudar o nome do Parque</label>
                 <input id="ipt-park-name" type="text" placeholder="ex: Jurassic Park" required>
                 <button id="park-name-btn" type="submit" class="button--primary">Alterar</button>
@@ -120,8 +120,8 @@
                 <!-- carregado dinâmicamente... -->
             </ul>
             <div class="tile-actions">
-                <button id="change-tile-btn" class="button--secondary" onclick="changeTile()">trocar <i class="ph-fill ph-swap"></i></button>
-                <button id="remove-tile-btn" class="button--accent" onclick="removeTile()">remover <i class="ph-fill ph-x-circle"></i></button>
+                <button id="change-tile-btn" class="button--secondary">trocar <i class="ph-fill ph-swap"></i></button>
+                <button id="remove-tile-btn" class="button--accent">remover <i class="ph-fill ph-x-circle"></i></button>
             </div>
         </div>
     </div>
@@ -145,11 +145,11 @@
     const AUTOSAVE_ENABLED = true;
     const AUTOSAVE_INTERVAL_MS = 1 * 60 * 1000;
     
-    const INCREASE_BALANCE_ENABLED = true;
+    const INCREASE_BALANCE_ENABLED = false;
     const INCREASE_BALANCE_INTERVAL_MS = 1 * 5 * 1000;
     const BASE_INCREASE_AMOUNT = 5;
     
-    const EVENTS_ENABLED = true;
+    const EVENTS_ENABLED = false;
     const EVENTS_INTERVAL_MS = 1 * 30 * 1000;
 
     function onPageLoad() {
@@ -178,6 +178,22 @@
             if(!EVENTS_ENABLED) return;
             events.randomEvent();
         }, EVENTS_INTERVAL_MS);
+    }
+
+    function submitEntranceForm(event) {
+        event.preventDefault();
+        const newName = String(document.getElementById("ipt-park-name").value || "").trim();
+        let gameData = storage.get("JPWG_DATA");
+
+        // Atualiza nome do Parque
+        if(gameData.park) {
+            gameData.park.name = newName;
+            storage.set("JPWG_DATA", gameData);
+
+            // Atualiza UI
+            loadStatusbar();
+            togglePanel("entrance-panel");
+        }
     }
 
     // Funções Utilitárias
@@ -209,6 +225,7 @@
         loadGrid();
         loadStatusbar();
     }
+
 </script>
 </body>
 </html>

@@ -25,7 +25,7 @@
 
     <!-- SideBar -->
     <div id="sidebar" class="closed">
-        <button id="sidebar-toggler" onclick="togglePanel('sidebar', false)">
+        <button id="sidebar-toggler" onclick="togglePanel('sidebar', {withOverlay: false})">
             <i class="ph-fill ph-caret-circle-right"></i>
         </button>
         <div class="sidebar-header">
@@ -133,12 +133,18 @@
 <script src="./js/utils/timer.js"></script>
 <script src="./js/utils/toast.js"></script>
 <script src="./js/metadata.js"></script>
+<script src="./js/utils/format-dino-fields.js"></script>
+<!-- SCRIPTS - Actions -->
+<script src="./js/switcher-actions.js"></script>
+<script src="./js/hatchery-actions.js"></script>
+<!-- <script src="./js/enclosure-actions.js"></script> -->
+<!-- <script src="./js/general-actions.js"></script> -->
 <!-- SCRIPTS - Loaders -->
 <script src="./js/loaders/grid.js"></script>
 <script src="./js/loaders/statusbar.js"></script>
-<script src="./js/loaders/enclosure.js"></script>
 <script src="./js/loaders/switcher.js"></script>
 <script src="./js/loaders/hatchery.js"></script>
+<script src="./js/loaders/enclosure.js"></script>
 <script src="./js/loaders/general.js"></script>
 <script>
     // Variáveis Globais
@@ -191,8 +197,7 @@
             storage.set("JPWG_DATA", gameData);
 
             // Atualiza UI
-            loadStatusbar();
-            togglePanel("entrance-panel");
+            togglePanel("entrance-panel", {onToggle: loadStatusbar});
         }
     }
 
@@ -211,6 +216,7 @@
     function closeOverlay(event) {
         if (event.currentTarget === event.target) {
             event.target.classList.replace("open", "closed");
+            cleanSelectedTiles();
         }
     }
 

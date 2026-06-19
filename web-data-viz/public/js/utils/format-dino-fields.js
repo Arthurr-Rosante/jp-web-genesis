@@ -42,3 +42,18 @@ function formatDinoHatchSuccess(hatchSuccess) {     // dado que hatchSuccess é 
 
     return String((hatchSuccess * 100) + "%")
 }
+
+function formatDinoHatchTime(hatchTime) {   // dado que hatchTime é passado em milissegundos, por padrão
+    if(!isValid(hatchTime)) return "[erro de parâmetro]"
+    let hatchTimeSeconds = hatchTime / 1000;
+
+    let seconds = String(hatchTimeSeconds % 60).split('.')[0].padStart(2, "0");
+    let minutes = String((hatchTimeSeconds / 60) % 60).split('.')[0].padStart(2, "0");
+    let hours = String(hatchTimeSeconds / 3600).split('.')[0].padStart(2, "0");
+    
+    if((hatchTimeSeconds / 3600) < 1) {
+        return `${minutes}:${seconds}`;
+    } 
+
+    return `${hours}:${minutes}:${seconds}`;
+}

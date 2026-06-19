@@ -38,7 +38,7 @@ function incubateSpecies(species) {
     storage.set("JPWG_DATA", gameData);
 
     // Cria timer de incubação
-    const timeToHatch = (BASE_HATCH_INTERVAL_MS * (species.ratingWeight))
+    const timeToHatch = (BASE_SPECIES_HATCH_INTERVAL_MS * (species.ratingWeight))
     let timeLeft = timeToHatch;
 
     const hatchTimer = createTimer(`hatchery-${emptySlot.id}`, () => {
@@ -59,7 +59,7 @@ function incubateSpecies(species) {
             return;
         }
         
-        timeLeft -= 1000;
+        timeLeft -= BASE_HATCH_INTERVAL_MS;
     }, 1000);
 
     // Altera status do slot de incubação

@@ -14,22 +14,8 @@ async function loadHatchery() {
         return;
     }
 
-    // Busca espécies de dinossauro
-    const species = await fetch(`/api/species`)
-    .then((res) => res.json().then((data) => {
-        if(!res.ok) throw data.error;
-        return data.species;
-    }))
-    .catch((error) => {
-        toast({
-            variant: "destructive",
-            title: "Erro ao retornar Espécies",
-            message: error
-        });
-    });
-
     // Carrega lista de espécies para incubação
-    species.forEach(sp => {
+    Object.values(speciesMap).forEach(sp => {
        const speciesCard = document.createElement("li");
        speciesCard.className = "hatchery-item";
        speciesCard.style.backgroundImage = `url(${speciesDataMap[sp.name].iconUrl})`;
@@ -49,6 +35,7 @@ function speciesCardHTML(species) {
         <p class="hatchery-title">${species.name.charAt(0).toUpperCase() + species.name.slice(1)}</p>
         <div class="hatchery-item-info">
             <p><span><i class="ph-fill ph-coins"></i> ${species.hatchCost}</span></p>
+            <p><span><i class="ph-fill ph-timer"></i> ${formatDinoHatchTime(BASE_SPECIES_HATCH_INTERVAL_MS * species.ratingWeight)}</span></p>
             <p><span><i class="ph-fill ph-egg-crack"></i> ${formatDinoHatchSuccess(species.hatchSuccessRate)}</span></p>
         </div>
         <div class="hatchery-item-footer">
@@ -69,14 +56,14 @@ function loadHatcherySlots() {
             return;
         };
         
-        const speciesData = speciesDataMap[speciesName];
-        slot.innerHTML = hatcherySlotHTML(status, speciesData);
+        const species = speciesMap[speciesName];
+        slot.innerHTML = hatcherySlotHTML(status, species);
 
         if(status === "done") {
             const placeBtn = slot.querySelector(".place-dino-btn"); 
             placeBtn.onclick = () => {
                 console.log("COLOCANDO DINO!");
-                console.log(speciesData);
+                console.log(species);
 
                 // Atualiza UI
                 slot.className = "hatchery-slot slot--empty";
@@ -86,7 +73,7 @@ function loadHatcherySlots() {
             const discardBtn = slot.querySelector(".discard-dino-btn"); 
             discardBtn.onclick = () => {
                 console.log("DESCARTANDO DINO!");
-                console.log(speciesData);
+                console.log(species);
 
                 // Atualiza UI
                 slot.className = "hatchery-slot slot--empty";
@@ -96,7 +83,9 @@ function loadHatcherySlots() {
     });
 }
 
-function hatcherySlotHTML(status, speciesData) {
+function hatcherySlotHTML(status, species) {
+    const speciesData = speciesDataMap[species.name];
+
     if(status === "hatching") {
         return `
             <div class="slot-dinosaur" style="background-image: url(${speciesData.iconUrl});">

@@ -163,13 +163,32 @@
     const EVENTS_ENABLED = false;
     const EVENTS_INTERVAL_MS = 1 * 30 * 1000;
 
+    const speciesMap = {};
+    const buildingsMap = {};
+
     function onPageLoad() {
         // Redireciona caso não esteja logado
         if(!storage.get("JPWG_DATA")) {
             window.location = "./login.html";
+            return;
         }
 
+        // Carrega página com modo editor desabilitado por padrão
         storage.set("JPWG_EDITOR_MODE", false);
+
+        // Carrega informações sobre espécies
+        fetch("/api/species")
+        .then(res => res.json())
+        .then(data => {
+            data.species.forEach((sp) => speciesMap[sp.name] = sp);
+        });
+
+        // Carrega informações sobre construções
+        fetch("/api/buildings")
+        .then(res => res.json())
+        .then(data => {
+            data.buildings.forEach((building) => buildingsMap[building.name] = building);
+        });
         
         // Carrega UI
         loadGameUI();

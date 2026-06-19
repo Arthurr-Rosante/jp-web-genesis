@@ -1,4 +1,4 @@
-async function loadTileSwitcher(selectedTile) {
+function loadTileSwitcher(selectedTile) {
     const tileSwitcherList = document.getElementById("tile-list");
     if(!tileSwitcherList) return;
     tileSwitcherList.innerHTML = "";
@@ -21,26 +21,13 @@ async function loadTileSwitcher(selectedTile) {
         return;
     }
 
-    // Busca buildings disponíveis
-    const buildings = await fetch(`/api/buildings`)
-    .then((res) => res.json().then((data) => {
-        if(!res.ok) throw data.error;
-        return data.buildings;
-    }))
-    .catch((error) => {
-        toast({
-            variant: "destructive",
-            title: "Erro ao retornar Construções",
-            message: error
-        });
-    });
-
     // Carrega lista de opções (apenas Tiles colocáveis)
-    buildings.filter(tile => tile.placeable)
-    .forEach(tile => {
+    Object.values(buildingsMap)
+    .filter(building => building.placeable)
+    .forEach(building => {
        const buildingOpt = document.createElement("li");
-        buildingOpt.className = `tile-item ${tile.name}`;
-        buildingOpt.innerHTML = tileOptionHTML(tile);
+        buildingOpt.className = `tile-item ${building.name}`;
+        buildingOpt.innerHTML = tileOptionHTML(building);
         buildingOpt.onclick = () => {
             cleanSelectedOptions();
             buildingOpt.classList.add("tile-item--selected");
@@ -75,7 +62,7 @@ async function loadTileSwitcher(selectedTile) {
             };
 
             // classList[1], pois: ['tile-item', 'tile-name', 'tile--selected']
-            const selectedOptData = buildings.find((b) => b.name === selectedOpt.classList[1]);
+            const selectedOptData = buildingsMap[selectedOpt.classList[1]];
             await changeTile(selectedTile, selectedOptData);
             
             togglePanel("tile-switcher", {onToggle: cleanSelectedTiles});
@@ -86,7 +73,7 @@ async function loadTileSwitcher(selectedTile) {
     if(removeTileBtn) {
         // Sempre retorna o Tile para o padrão (terrain-grass)
         removeTileBtn.onclick = async () => {
-            const terrainGrass = buildings.find(b => b.name === "terrain-grass");
+            const terrainGrass = buildingsMap["terrain-grass"];
 
             if (!selectedTile.removable || selectedTile.idSpecies) {
                 toast({

@@ -148,8 +148,11 @@
 <script src="./js/loaders/general.js"></script>
 <script>
     // Variáveis Globais
-    const BASE_INCREASE_AMOUNT = 5;
-    const BASE_HATCH_INTERVAL_MS = 1 * 30 * 1000;
+    const BASE_BALANCE_INCREASE = 5;
+    // intervalo base de quantas vezes p/ segundo o progresso de incubação é contabilizado (influenciado por pouringRain)
+    const BASE_HATCH_INTERVAL_MS = 1 * 1 * 1000;
+    // intervalo base de incubação p/ todas as espécies (influenciado pelo ratingWeight)
+    const BASE_SPECIES_HATCH_INTERVAL_MS = 1 * 30 * 1000;
 
     const AUTOSAVE_ENABLED = true;
     const AUTOSAVE_INTERVAL_MS = 1 * 60 * 1000;

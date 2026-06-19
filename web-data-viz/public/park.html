@@ -96,9 +96,9 @@
         <div id="hatchery-panel" class="panel">
             <h3 class="panel-title">Laboratório de Incubação</h3>
             <div id="hatchery-slots">
-                <div id="slot-1" class="hatchery-slot slot-empty"></div>
-                <div id="slot-2" class="hatchery-slot slot-empty"></div>
-                <div id="slot-3" class="hatchery-slot slot-empty"></div>
+                <div id="slot-1" class="hatchery-slot slot--empty"></div>
+                <div id="slot-2" class="hatchery-slot slot--empty"></div>
+                <div id="slot-3" class="hatchery-slot slot--empty"></div>
             </div>
             <ul id="hatchery-list">
                 <!-- carregado dinâmicamente... -->
@@ -148,12 +148,14 @@
 <script src="./js/loaders/general.js"></script>
 <script>
     // Variáveis Globais
+    const BASE_INCREASE_AMOUNT = 5;
+    const BASE_HATCH_INTERVAL_MS = 1 * 30 * 1000;
+
     const AUTOSAVE_ENABLED = true;
     const AUTOSAVE_INTERVAL_MS = 1 * 60 * 1000;
     
     const INCREASE_BALANCE_ENABLED = false;
     const INCREASE_BALANCE_INTERVAL_MS = 1 * 5 * 1000;
-    const BASE_INCREASE_AMOUNT = 5;
     
     const EVENTS_ENABLED = false;
     const EVENTS_INTERVAL_MS = 1 * 30 * 1000;

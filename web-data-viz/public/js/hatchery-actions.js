@@ -82,7 +82,76 @@ function hatchSpecies(species, slot) {
     if(timer) timer.destroy();
     
     slot.classList.replace("slot--hatching", "slot--done");
-    console.log("INCUBADO!");
-    console.log(species);
     loadHatcherySlots();
+
+    toast({
+        variant: "success",
+        title: "Incubação Concluída",
+        message: `O embrião de ${species.name} está pronto.`
+    });
+}
+
+async function placeDinosaur(species, tile) {
+    let gameData = storage.get("JPWG_DATA");
+    if(!gameData) {
+        toast({
+            variant: "destructive",
+            title: "Erro",
+            message: "Dados estão corrompidos. Tente logar-se novamente."
+        });
+        return;
+    }
+    
+    // Verifica se o Tile está apto a receber o espécime. Na prática, essa parte
+    // é preciocismo, dado que a este ponto tudo já deve estar nos conformes.
+    if(tile.category !== "enclosure") {
+        toast({
+            variant: "warn",
+            title: "Operação Negada",
+            message: `Este Tile não é um Cercado.`
+        });
+        return;
+    } else if(tile.idSpecies) {
+        toast({
+            variant: "warn",
+            title: "Operação Negada",
+            message: "Uma dinossauro já ocupa este Cercado!"
+        });
+        return;
+    }
+
+    fetch(`/api/tiles/${tile.idPark}`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ 
+            tiles: [{
+                positionRow: tile.positionRow, 
+                positionCol: tile.positionCol, 
+                idSpecies: species.id
+            }] 
+        })
+    })
+    .then((res) => res.json().then(data => {
+        if(!res.ok) {
+            throw data.error;
+        }
+
+        gameData.tiles = data.tiles;
+        storage.set("JPWG_DATA", gameData);
+        loadGrid();
+
+        toast({
+            variant: "success",
+            title: "Espécime Colocado",
+            message: `${species.name} colocado em ${buildingsDataMap[tile.name].translatedName}`
+        });
+    }))
+    .catch((error) => {
+        toast({
+            variant: "destructive",
+            title: "Erro ao colocar dinossauro",
+            message: error
+        });
+        return;
+    });
 }

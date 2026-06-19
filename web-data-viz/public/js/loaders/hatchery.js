@@ -28,6 +28,8 @@ async function loadHatchery() {
         hatcheryList.appendChild(speciesCard);
     });
 
+    // Carrega Slots da Incubadora
+    loadHatcherySlots()
 };
 
 function speciesCardHTML(species) {
@@ -57,33 +59,73 @@ function loadHatcherySlots() {
         };
         
         const species = speciesMap[speciesName];
-        slot.innerHTML = hatcherySlotHTML(status, species);
+        slot.innerHTML = hatcherySlotHTML(species, slot);
 
         if(status === "done") {
-            const placeBtn = slot.querySelector(".place-dino-btn"); 
-            placeBtn.onclick = () => {
-                console.log("COLOCANDO DINO!");
-                console.log(species);
+            const placeForm = slot.querySelector(`#${slot.id}-place-form`); 
+            placeForm.onsubmit = async (event) => {
+                event.preventDefault();
+
+                const gameData = storage.get("JPWG_DATA");
+                if(!gameData) {
+                    toast({
+                        variant: "destructive",
+                        title: "Erro",
+                        message: "Dados estão corrompidos. Tente logar-se novamente."
+                    });
+                    return;
+                }
+
+                // Descobre posição do tile a partir do valor do select
+                const position = placeForm.querySelector(".place-dinosaur").value;
+                if(!position) {
+                    toast({
+                        variant: "warn",
+                        title: "Operação Negada",
+                        message: `Selecione um Cercado vazio para colocar ${species.name}`
+                    });
+                    return;
+                };
+
+                const positionRow = Number(position.split("_")[0].slice(1));
+                const positionCol = Number(position.split("_")[1].slice(1));
+                const tile = gameData.tiles.find((t) => t.positionRow === positionRow && t.positionCol === positionCol);
+                if(!tile) {
+                    toast({
+                        variant: "warn",
+                        title: "Operação Negada",
+                        message: `Este Tile parece estar indefinido. Tente logar-se novamente.`
+                    });
+                    return;
+                }
+
+                await placeDinosaur(species, tile);
 
                 // Atualiza UI
-                slot.className = "hatchery-slot slot--empty";
-                loadHatcherySlots();
+                togglePanel("hatchery-panel", {onToggle: () => {
+                    slot.className = "hatchery-slot slot--empty";
+                }})
             };
             
             const discardBtn = slot.querySelector(".discard-dino-btn"); 
             discardBtn.onclick = () => {
-                console.log("DESCARTANDO DINO!");
-                console.log(species);
-
-                // Atualiza UI
                 slot.className = "hatchery-slot slot--empty";
                 loadHatcherySlots();
+                
+                console.log(`Evento: ${species.name} descartado de ${slot.id} às ${new Date().toLocaleTimeString()}`);
+                toast({
+                    variant: "success",
+                    title: "Descarte concluído",
+                    message: `O embrião de ${species.name} foi descartado`
+                });
             };
         }
     });
 }
 
-function hatcherySlotHTML(status, species) {
+function hatcherySlotHTML(species, slot) {
+    // slot.classList[1], pois: ['hatchery-slot', 'slot--hatching', 'hatching--tiranossauro']; 
+    const status = slot.classList[1].split("--")[1];
     const speciesData = speciesDataMap[species.name];
 
     if(status === "hatching") {
@@ -110,12 +152,12 @@ function hatcherySlotHTML(status, species) {
         return `
             <div class="slot-dinosaur" style="background-image: url(${speciesData.iconUrl});">
                 <button class="discard-dino-btn"><p class="ph-fill ph-trash"></p></button>
-                <div class="slot-content">
-                    <select class="ipt-place-dinosaur">
+                <form id="${slot.id}-place-form" class="slot-content">
+                    <select name="tilePosition" class="place-dinosaur">
                     ${availableEnclosuresList.map((tile) => enclosureOptionHTML(tile)).join("")}
                     </select>
-                    <button class="place-dino-btn">Colocar Dinossauro</button>
-                </div>
+                    <button type="submit" class="place-dino-btn">Colocar Dinossauro</button>
+                </form>
             </div>
         `;
     };

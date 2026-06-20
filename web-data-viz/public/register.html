@@ -36,7 +36,7 @@
                         <label class="field-label" for="ipt-password">Código de Acesso (Senha)</label>
                         <div class="password-wrapper">
                             <input id="ipt-password" type="password" oninput="validatePassword(this)" placeholder="Min. 8 caracteres" minlength="8" class="field-input has-errors" required>
-                            <i id="ipt-password-icon" class="ph ph-eye" onclick="togglePasswordVisiblity('ipt-password')"></i>
+                            <i id="ipt-password-icon" class="ph ph-eye" onclick="togglePasswordVisibility('ipt-password')"></i>
                         </div>
                         <p id="ipt-password-auth-message" class="auth-message"></p>
                     </div>
@@ -44,7 +44,7 @@
                         <label class="field-label" for="ipt-password-confirm">Confirmar Código de Acesso</label>
                         <div class="password-wrapper">
                             <input id="ipt-password-confirm" type="password"  oninput="validatePassword(this, true)" placeholder="Min. 8 caracteres" minlength="8" class="field-input has-errors" required>
-                            <i id="ipt-password-confirm-icon" class="ph ph-eye" onclick="togglePasswordVisiblity('ipt-password-confirm')"></i>
+                            <i id="ipt-password-confirm-icon" class="ph ph-eye" onclick="togglePasswordVisibility('ipt-password-confirm')"></i>
                         </div>
                         <p id="ipt-password-confirm-auth-message" class="auth-message"></p>
                     </div>
@@ -62,6 +62,7 @@
 <!-- SCRIPTS -->
 <script src="./js/utils/storage.js"></script>
 <script src="./js/utils/toast.js"></script>
+<script src="./js/utils/password-toggler.js"></script>
 <script src="./js/validations.js"></script>
 <script>
     function onPageLoad() {

@@ -1,4 +1,4 @@
-async function loadHatchery() {
+function loadHatchery() {
     const hatcheryList = document.getElementById("hatchery-list");
     if(!hatcheryList) return;
     hatcheryList.innerHTML = "";
@@ -104,7 +104,7 @@ function loadHatcherySlots() {
                 // Atualiza UI
                 togglePanel("hatchery-panel", {onToggle: () => {
                     slot.className = "hatchery-slot slot--empty";
-                }})
+                }});
             };
             
             const discardBtn = slot.querySelector(".discard-dino-btn"); 
@@ -133,6 +133,7 @@ function hatcherySlotHTML(species, slot) {
             <div class="slot-dinosaur" style="background-image: url(${speciesData.iconUrl});">
                 <div class="slot-content">
                     <p>Progresso da Incubação</p>
+                    <span class="slot-hatch-progress">0%</span>
                 </div>
             </div>
         `;

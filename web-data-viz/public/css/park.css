@@ -210,6 +210,104 @@ body {
     z-index: 999 !important;
 }
 
+/* Terrenos */
+.terrain-grass {
+    background-image: url("../assets/images/terrains/terrain-grass.png");
+}
+.terrain-trees {
+    background-image: url("../assets/images/terrains/terrain-trees.png");
+}
+.terrain-pond {
+    background-image: url("../assets/images/terrains/terrain-pond.png");
+}
+.terrain-dirt {
+    background-image: url("../assets/images/terrains/terrain-dirt.png");
+}
+
+/* Caminhos */
+.path {
+    background-image: url("../assets/images/paths/path.png");
+}
+.path-t {
+    background-image: url("../assets/images/paths/path-t.png");
+}
+.path-l {
+    background-image: url("../assets/images/paths/path-l.png");
+}
+.path-cross {
+    background-image: url("../assets/images/paths/path-cross.png");
+}
+
+/* Cercados */
+.enclosure-1 {
+    background-image: url("../assets/images/enclosures/enclosure-1.png");
+}
+.enclosure-2 {
+    background-image: url("../assets/images/enclosures/enclosure-2.png");
+}
+.enclosure-3 {
+    background-image: url("../assets/images/enclosures/enclosure-3.png");
+}
+
+/* Construções */
+.entrance {
+    background-image: url("../assets/images/buildings/entrance.png");
+}
+.visitor-center {
+    background-image: url("../assets/images/buildings/visitor-center.png");
+}
+.hatchery {
+    background-image: url("../assets/images/buildings/hatchery.png");
+}
+
+/* Dinossauros */
+.dinosaur {
+    position: absolute;
+    /* top: 50%;
+    left: 50%; */
+    transform: translateY(-8%) rotateZ(0deg) scale(0.5);
+    clip-path: none;
+    pointer-events: none;
+    inset: 0;
+}
+
+.anquilossauro {
+    background-image: url("../assets/images/dinosaurs/anquilossauro.png");
+}
+.braquiossauro {
+    background-image: url("../assets/images/dinosaurs/braquiossauro.png");
+}
+.ceratossauro {
+    background-image: url("../assets/images/dinosaurs/ceratossauro.png");
+}
+.coritossauro {
+    background-image: url("../assets/images/dinosaurs/coritossauro.png");
+}
+.compsognathus {
+    background-image: url("../assets/images/dinosaurs/compsognathus.png");
+}
+.dilofossauro {
+    background-image: url("../assets/images/dinosaurs/dilofossauro.png");
+}
+.espinossauro {
+    background-image: url("../assets/images/dinosaurs/espinossauro.png");
+}
+.estegossauro {
+    background-image: url("../assets/images/dinosaurs/estegossauro.png");
+}
+.parassaurolofo {
+    background-image: url("../assets/images/dinosaurs/parassaurolofo.png");
+}
+.tiranossauro {
+    background-image: url("../assets/images/dinosaurs/tiranossauro.png");
+}
+.triceratops {
+    background-image: url("../assets/images/dinosaurs/triceratops.png");
+}
+.velociraptor {
+    background-image: url("../assets/images/dinosaurs/velociraptor.png");
+}
+
 .rain {
     background-image: url("../assets/images/rain.gif");
     background-size: contain;
@@ -219,5 +317,5 @@ body {
 
     position: absolute;
     inset: 0;
-    z-index: 997;
+    z-index: 995;
 }

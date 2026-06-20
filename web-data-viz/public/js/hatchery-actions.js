@@ -44,15 +44,8 @@ function incubateSpecies(species) {
     const hatchTimer = createTimer(`hatchery-${emptySlot.id}`, () => {
         let progress =  Math.round(((timeToHatch - timeLeft) / timeToHatch) * 100);
 
-        loadHatcherySlots();
-        let slotContent = emptySlot.querySelector(".slot-content");
-        if(slotContent) {
-            const spanHatchProgress = document.createElement("span");
-            spanHatchProgress.className = "slot-hatch-progress";
-            spanHatchProgress.innerHTML = `${progress}%`;
-
-            slotContent.appendChild(spanHatchProgress);
-        }
+        let spanHatchProgress = emptySlot.querySelector(`#${emptySlot.id} .slot-hatch-progress`);
+        if(spanHatchProgress) spanHatchProgress.innerHTML = `${progress}%`;
         
         if(timeLeft <= 0) {
             hatchSpecies(species, emptySlot);
@@ -67,7 +60,7 @@ function incubateSpecies(species) {
     emptySlot.classList.add(`hatching--${species.name}`);
 
     // Atualiza UI
-    loadStatusbar();
+    loadParkBalance(newBalance);
     loadHatcherySlots();
 
     toast({
@@ -127,7 +120,8 @@ async function placeDinosaur(species, tile) {
             tiles: [{
                 positionRow: tile.positionRow, 
                 positionCol: tile.positionCol, 
-                idSpecies: species.id
+                idSpecies: species.id,
+                removable: 0
             }] 
         })
     })
@@ -136,10 +130,14 @@ async function placeDinosaur(species, tile) {
             throw data.error;
         }
 
+        // Atualiza sessionStorage
         gameData.tiles = data.tiles;
         storage.set("JPWG_DATA", gameData);
+
+        // Atualiza UI
         loadGrid();
 
+        console.log(`Evento: ${species.name} colocado em ${buildingsDataMap[tile.name].translatedName} às ${new Date().toLocaleTimeString()}`);
         toast({
             variant: "success",
             title: "Espécime Colocado",
@@ -152,6 +150,5 @@ async function placeDinosaur(species, tile) {
             title: "Erro ao colocar dinossauro",
             message: error
         });
-        return;
     });
 }

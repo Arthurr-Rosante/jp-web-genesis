@@ -266,7 +266,7 @@ GROUP BY userId;
 
 CREATE OR REPLACE VIEW vw_tiles
 AS
-SELECT t.*, b.name, b.category, b.durability, b.upgradeCost
+SELECT t.*, b.idUpgrade, b.name, b.category, b.durability, b.baseCost, b.upgradeCost
 FROM user u
 JOIN park p ON u.id = p.idUser
 JOIN tile t ON p.idUser = t.idPark

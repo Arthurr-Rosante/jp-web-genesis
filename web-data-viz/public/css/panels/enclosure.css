@@ -1,0 +1,223 @@
+#enclosure-panel {
+    background-image: url('../../assets/images/enclosure-background.png');
+    
+    flex-direction: row;
+    align-items: stretch;
+    padding: 16px;
+    column-gap: 16px;
+    max-width: 1200px;
+}
+
+#enclosure-panel.broken {
+    background-image: url('../../assets/images/enclosure-broken-background.png');
+}
+
+.enclosure-dinosaur {
+    overflow: hidden;
+
+    background-color: rgba(26, 20, 7, 0.9);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.species-img {
+    flex: 1;
+    width: 100%;
+    object-fit: contain;
+    padding: 24px;
+}
+
+.enclosure-dinosaur-card {
+    background-color: var(--background);
+    border-top: 2px solid var(--border);
+
+    width: 100%;
+    padding: 8px 14px;
+    
+    display: flex;
+    align-items: center;
+    column-gap: 14px;
+}
+
+.enclosure-dinosaur-card h2 {
+    font-family: 'Courier Prime', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--foreground);
+}
+
+.card-image {
+    position: relative;
+    background-color: var(--secondary);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.species-icon {
+    width: 56px;
+    height: auto;
+    display: block;
+}
+
+.frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.enclosure-status {
+    overflow: hidden;
+    min-height: 0;
+
+    background-color: rgba(26, 20, 7, 0.9);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.enclosure-status-header {
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--border);
+    background-color: var(--background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.enclosure-status-header h2 {
+    font-family: 'Courier Prime', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.enclosure-status-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 14px 16px;
+    gap: 14px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.empty-enclosure {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-content: center;
+}
+.empty-enclosure p {
+    font-size: 32px;
+    letter-spacing: 10px;
+    text-align: center;
+}
+
+.enclosure-radar {
+    position: relative;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background-color: var(--background);
+    overflow: hidden;
+}
+
+.enclosure-radar canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+}
+
+/* Cercado - Lista de Informações */
+.enclosure-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+}
+
+.enclosure-info ul {
+    font-family: 'Courier Prime', monospace;
+    font-size: 16px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.3rem 14px;
+}
+
+.enclosure-info ul li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--muted-foreground);
+    border-bottom: 1px solid var(--border);
+    padding: 2px 0 2px 8px;
+}
+
+.enclosure-info ul li span {
+    font-weight: 700;
+    color: var(--foreground);
+}
+
+/* Cercado - Footer */
+.enclosure-status-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 8px 16px;
+    border-top: 1px solid var(--border);
+    background-color: var(--background);
+}
+
+.enclosure-actions {
+    display: flex;
+    column-gap: 16px;
+}
+
+.enclosure-health {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+ 
+.enclosure-health > span {
+    font-family: 'Courier Prime', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+ 
+.enclosure-healthbar-wrapper {
+    /* position: relative; */
+    width: 100%;
+    height: 18px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+ 
+.enclosure-healthbar-wrapper #enclosure-healthbar {
+    /* position: absolute; */
+    /* inset: 0; */
+    background-color: var(--secondary);
+    height: 18px;
+    width: 0px;
+}

@@ -137,7 +137,7 @@
 <!-- SCRIPTS - Actions -->
 <script src="./js/switcher-actions.js"></script>
 <script src="./js/hatchery-actions.js"></script>
-<!-- <script src="./js/enclosure-actions.js"></script> -->
+<script src="./js/enclosure-actions.js"></script>
 <!-- <script src="./js/general-actions.js"></script> -->
 <!-- SCRIPTS - Loaders -->
 <script src="./js/loaders/grid.js"></script>
@@ -148,20 +148,24 @@
 <script src="./js/loaders/general.js"></script>
 <script>
     // Variáveis Globais
-    const BASE_BALANCE_INCREASE = 5;
-    // intervalo base de quantas vezes p/ segundo o progresso de incubação é contabilizado (influenciado por pouringRain)
-    const BASE_HATCH_INTERVAL_MS = 1 * 1 * 1000;
-    // intervalo base de incubação p/ todas as espécies (influenciado pelo ratingWeight)
-    const BASE_SPECIES_HATCH_INTERVAL_MS = 1 * 30 * 1000;
+    let REPAIR_FEE = 0.1;
+    let BASE_REPAIR_POINTS = 10;
+    let BASE_BALANCE_INCREASE = 50;
+    let MAX_BALANCE_AMOUNT = 999999;
 
-    const AUTOSAVE_ENABLED = true;
-    const AUTOSAVE_INTERVAL_MS = 1 * 60 * 1000;
+    // intervalo base de quantas vezes p/ segundo o progresso de incubação é contabilizado (influenciado por pouringRain)
+    let BASE_HATCH_INTERVAL_MS = 1 * 1 * 1000;
+    // intervalo base de incubação p/ todas as espécies (influenciado pelo ratingWeight)
+    let BASE_SPECIES_HATCH_INTERVAL_MS = 1 * 30 * 1000;
+
+    let AUTOSAVE_ENABLED = true;
+    let AUTOSAVE_INTERVAL_MS = 1 * 60 * 1000;
     
-    const INCREASE_BALANCE_ENABLED = false;
-    const INCREASE_BALANCE_INTERVAL_MS = 1 * 5 * 1000;
+    let INCREASE_BALANCE_ENABLED = true;
+    let INCREASE_BALANCE_INTERVAL_MS = 1 * 5 * 1000;
     
-    const EVENTS_ENABLED = false;
-    const EVENTS_INTERVAL_MS = 1 * 30 * 1000;
+    let EVENTS_ENABLED = false;
+    let EVENTS_INTERVAL_MS = 1 * 30 * 1000;
 
     const speciesMap = {};
     const buildingsMap = {};

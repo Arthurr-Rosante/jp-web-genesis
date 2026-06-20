@@ -66,11 +66,23 @@ async function updateOne(idPark, positionRow, positionCol, fields = {}) {
     let treatedFields = 
         fieldKeys.map(k => [k, fields[k] === null ? `null` : fields[k]].join("=")).join(", ");
 
-    var instrucaoSql = `
+    var instrucaoSql1 = `
         UPDATE tile SET ${treatedFields} WHERE idPark = ${idPark} AND positionRow = ${positionRow} AND positionCol = ${positionCol};
     `;   
-    console.log("[tileModel] Executando a instrução SQL: \n" + instrucaoSql);
-    const updateResult = await database.executar(instrucaoSql);
+    
+    console.log("[tileModel] Executando a instrução SQL: \n" + instrucaoSql1);
+    await database.executar(instrucaoSql1);
+    
+    if(fieldKeys.includes("idSpecies")) {
+        var instrucaoSql2 = `
+            UPDATE park 
+            SET rating = (SELECT rating FROM vw_parkRating WHERE userId = ${idPark}) 
+            WHERE idUser = ${idPark};
+        `;   
+
+        console.log("[tileModel] Executando a instrução SQL: \n" + instrucaoSql2);
+        await database.executar(instrucaoSql2);
+    }
 
     return getOneByParkId(idPark, positionRow, positionCol);
 }

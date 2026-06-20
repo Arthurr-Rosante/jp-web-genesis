@@ -131,11 +131,12 @@ async function placeDinosaur(species, tile) {
         }
 
         // Atualiza sessionStorage
+        gameData.park.rating = gameData.park.rating + species.ratingWeight;
         gameData.tiles = data.tiles;
         storage.set("JPWG_DATA", gameData);
 
         // Atualiza UI
-        loadGrid();
+        loadGameUI();
 
         console.log(`Evento: ${species.name} colocado em ${buildingsDataMap[tile.name].translatedName} às ${new Date().toLocaleTimeString()}`);
         toast({

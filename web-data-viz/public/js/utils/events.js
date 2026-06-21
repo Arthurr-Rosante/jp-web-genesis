@@ -95,4 +95,109 @@ const events = {
 
         console.log(`Evento: "randomEvent" às ${new Date().toLocaleTimeString()}`);
     },
+    dinosaurAttack: (tile) => {
+        let gameData = storage.get("JPWG_DATA");
+        let updatedTile = tile;
+
+        const dinosaur = tile.dinosaur;
+
+        // Calcula o dano do ataque
+        const weight_factor = Number(dinosaur.weightInKilograms) / 1000;    // leva em conta o peso do dinossauro p/ aumentar o dano
+        const damage = Math.max(
+            Math.floor(((BASE_ATTACK_DAMAGE * dinosaur.aggressiveness) + weight_factor) - tile.durability),  // Math.floor() p/ evitar número quebrado
+            1
+        );  // Math.max() pois quero que, em casos onde a durabilidade abater todo o dano recebido, o ataque dê ao menos 1pt de dano
+
+        const newHp = Math.max(tile.currentHp - damage, 0);    // Math.max() p/ impedir de HP ficar negativo
+        updatedTile.currentHp = newHp;
+
+        // Atualiza sessionStorage
+        gameData.tiles = gameData.tiles.map(t => {
+            if(t.positionRow === tile.positionRow && t.positionCol === tile.positionCol) {
+                return updatedTile;
+            }
+            return t;
+        });
+        storage.set("JPWG_DATA", gameData);
+        
+        // Verifica Fuga de Dinossauro
+        if(FLEES_ENABLED && updatedTile.currentHp <= 0) {
+            events.dinosaurEscape(updatedTile);
+            return;   
+        }
+
+        // Atualiza UI (apenas se painel do cercado estiver aberto)
+        loadGrid();
+        const enclosurePanel = document.getElementById("enclosure-panel");
+        if(enclosurePanel.closest(".overlay").classList.contains("open")) {
+            loadEnclosure(tile);
+        }
+
+        toast({
+            title: "Ataque à Cercado",
+            message: `${dinosaur.name} está atacando ${printBuildingNameWithPosition(tile)}!`
+        })
+        console.log(`Evento: "dinosaurAttack" em ${printBuildingNameWithPosition(tile)} às ${new Date().toLocaleTimeString()}`);
+    },
+    dinosaurEscape: (tile) => {
+        let gameData = storage.get("JPWG_DATA");
+
+        const dinosaur = tile.dinosaur;
+
+        fetch(`/api/tiles/${tile.idPark}`, {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                tiles: [
+                    {
+                        positionRow: tile.positionRow,
+                        positionCol: tile.positionCol,
+                        idSpecies: null,
+                        removable: 1
+                    }
+                ]
+            })
+        })
+        .then(res => res.json().then(data => {
+            if(!res.ok) {
+                throw data.error;
+            }
+
+            // Atualiza sessionStorage
+            const updatedTiles = data.tiles;
+
+            gameData.tiles = updatedTiles;
+            gameData.park.rating = gameData.park.rating - tile.dinosaur.ratingWeight;
+            storage.set("JPWG_DATA", gameData);
+
+            // Atualiza UI
+            loadGameUI();
+            const enclosurePanel = document.getElementById("enclosure-panel");
+            if(enclosurePanel.closest(".overlay").classList.contains("open")) {
+                loadEnclosure(data.updated[0]);
+            }
+
+            toast({
+                variant: "warn",
+                title: "Fuga de Dinossauro",
+                message: `${dinosaur.name} fugiu de ${printBuildingNameWithPosition(tile)}!`
+            })
+            console.log(`Evento: "dinosaurEscape" em ${printBuildingNameWithPosition(tile)} às ${new Date().toLocaleTimeString()}`);
+
+
+
+
+
+
+
+            console.log("DEPOIS DE FUGA: ", data.updated[0]);
+        }))
+        .catch((error) => {
+            toast({
+                variant: "destructive",
+                title: "Erro na fuga de espécime",
+                message: error
+            })
+        })
+    },
 };

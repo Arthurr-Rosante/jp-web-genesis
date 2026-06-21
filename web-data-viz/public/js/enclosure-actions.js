@@ -85,7 +85,7 @@ function repairEnclosure(tile) {
         storage.set("JPWG_DATA", gameData);
 
         // Atualiza UI
-        loadStatusbar();
+        loadGameUI();
         loadEnclosure(data.updated[0]);
 
         console.log(`Evento: ${tile.name} reparado às ${new Date().toLocaleTimeString()}`);

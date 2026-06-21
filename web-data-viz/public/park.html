@@ -270,6 +270,40 @@
         loadStatusbar();
     }
 
+    function generateDinosaurAttackTimers() {
+        // Cria/recria timer de ataque
+        const timerName = "dinosaur-attack";
+        let timer = activeTimers.get(timerName);
+        if(timer) timer.destroy();
+
+        timer = createTimer(timerName, () => {
+            if(!ATTACKS_ENABLED) return;
+
+            const freshGameData = storage.get("JPWG_DATA");
+            if(!freshGameData || !freshGameData.tiles) return;
+
+            const tilesWithDinosaur = freshGameData.tiles.filter(t => t.idSpecies && t.dinosaur);
+            if(tilesWithDinosaur.length <= 0) return;
+            
+            tilesWithDinosaur.forEach(tile => {
+                const freshTile = freshGameData.tiles.find(t => t.positionRow === tile.positionRow && t.positionCol === tile.positionCol);                
+                const dinosaur = freshTile.dinosaur;
+
+                // Verifica se ataque ocorreu ou falhou
+                const successChance = Math.min(
+                    Math.pow(dinosaur.aggressiveness, 2) * BASE_AGGRESSIVENESS_MULTIPLER, 
+                    1.0
+                );
+                const failChance = Math.random();
+                if(failChance > successChance) return;
+
+                events.dinosaurAttack(freshTile);
+            })
+        }, ATTACKS_INTERVAL_MS);
+
+        return timer;
+    }
+
 </script>
 </body>
 </html>

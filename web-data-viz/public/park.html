@@ -281,15 +281,13 @@
         timer = createTimer(timerName, () => {
             if(!ATTACKS_ENABLED) return;
 
-            const freshGameData = storage.get("JPWG_DATA");
-            if(!freshGameData || !freshGameData.tiles) return;
+            const gameData = storage.get("JPWG_DATA");
+            if(!gameData || !gameData.tiles) return;
 
-            const tilesWithDinosaur = freshGameData.tiles.filter(t => t.idSpecies && t.dinosaur);
-            if(tilesWithDinosaur.length <= 0) return;
-            
-            tilesWithDinosaur.forEach(tile => {
-                const freshTile = freshGameData.tiles.find(t => t.positionRow === tile.positionRow && t.positionCol === tile.positionCol);                
-                const dinosaur = freshTile.dinosaur;
+            gameData.tiles.forEach(tile => {
+                if(!tile.idSpecies || !tile.dinosaur) return;
+
+                const dinosaur = tile.dinosaur;
 
                 // Verifica se ataque ocorreu ou falhou
                 const successChance = Math.min(
@@ -299,7 +297,7 @@
                 const failChance = Math.random();
                 if(failChance > successChance) return;
 
-                events.dinosaurAttack(freshTile);
+                events.dinosaurAttack(tile);
             })
         }, ATTACKS_INTERVAL_MS);
 

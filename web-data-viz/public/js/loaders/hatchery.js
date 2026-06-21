@@ -142,7 +142,7 @@ function hatcherySlotHTML(species, slot) {
     if(status === "done") {
         const gameData = storage.get("JPWG_DATA");
         let availableEnclosuresList = 
-            gameData.tiles.filter((t) => t.category === "enclosure" && t.idSpecies === null);
+            gameData.tiles.filter((t) => t.category === "enclosure" && t.idSpecies === null && t.currentHp > 0);
 
         const enclosureOptionHTML = (tile) => `
             <option value="r${tile.positionRow}_c${tile.positionCol}">

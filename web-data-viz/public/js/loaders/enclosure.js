@@ -3,6 +3,10 @@ function loadEnclosure(tile) {
 
     const panel = document.getElementById("enclosure-panel");
     if(!panel) return;
+
+    if(tile.currentHp <= 0) {
+        panel.classList.add("broken");
+    }
     panel.innerHTML = "";
 
     if(tile.idSpecies) {
@@ -21,7 +25,12 @@ function loadEnclosure(tile) {
     
     const repairEnclosureBtn = document.getElementById("repair-enclosure-btn");
     if(repairEnclosureBtn) {
-        repairEnclosureBtn.onclick = () => repairEnclosure(tile);
+        repairEnclosureBtn.onclick = () => {
+            repairEnclosure(tile);
+            if(panel.classList.contains("broken")) {
+                panel.classList.remove("broken");
+            }
+        };
     }
     
     const upgradeEnclosureBtn = document.getElementById("upgrade-enclosure-btn");
@@ -78,7 +87,7 @@ function occupiedEnclosureHTML(tile) {
 
 function emptyEnclosureHTML(tile) {
     return `
-        <h3 class="panel-title">Cercado Vazio</h3>
+        <h3 class="panel-title">${tile.currentHp > 0 ? "Cercado Vazio" : "Cercado Quebrado"}</h3>
         <div class="enclosure-dinosaur"></div>
         <div class="enclosure-status">
             <div class="enclosure-status-header">
@@ -86,8 +95,8 @@ function emptyEnclosureHTML(tile) {
             </div>
             <div class="enclosure-status-body">
                 <div class="empty-enclosure">
-                    <p>Cercado Vazio</p>
-                    <button id="go-to-hatchery-btn">Incubar Espécime</button>  
+                    <p>${tile.currentHp > 0 ? "Cercado Vazio" : "Cercado Quebrado"}</p>
+                    ${tile.currentHp > 0 ? `<button id="go-to-hatchery-btn">Incubar Espécime</button>` : `<span>Repare a Construção!</span>`} 
                 </div>
             </div>
             ${enclosureFooterHTML(tile)}
@@ -101,7 +110,7 @@ function enclosureFooterHTML(tile) {
             ${enclosureHealthbarHTML(tile)}
             <div class="enclosure-actions">
                 <button id="repair-enclosure-btn" class="button--secondary"><i class="ph-fill ph-wrench"></i>Reparar (${tile.baseCost * BASE_REPAIR_FEE})</button>
-                ${tile.idUpgrade ? `<button id="upgrade-enclosure-btn" class="button--primary"><i class="ph-fill ph-coins"></i> Melhorar (${tile.upgradeCost})</button>` : ""}
+                ${tile.idUpgrade && tile.currentHp > 0 ? `<button id="upgrade-enclosure-btn" class="button--primary"><i class="ph-fill ph-coins"></i> Melhorar (${tile.upgradeCost})</button>` : ""}
             </div>
         </div>
     `;

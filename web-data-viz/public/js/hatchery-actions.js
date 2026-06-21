@@ -98,7 +98,13 @@ async function placeDinosaur(species, tile) {
     if(tile.category !== "enclosure") {
         toast({
             title: "Operação Negada",
-            message: `Este Tile não é um Cercado.`
+            message: `Este Tile não é um Cercado!`
+        });
+        return;
+    } else if(tile.currentHp <= 0) {
+        toast({
+            title: "Operação Negada",
+            message: `Este cercado está quebrado! Conserte-o primeiro.`
         });
         return;
     } else if(tile.idSpecies) {

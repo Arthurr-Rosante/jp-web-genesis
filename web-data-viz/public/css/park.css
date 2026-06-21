@@ -248,6 +248,9 @@ body {
 .enclosure-3 {
     background-image: url("../assets/images/enclosures/enclosure-3.png");
 }
+.enclosure-broken {
+    background-image: url("../assets/images/enclosures/enclosure-broken.png");
+}
 
 /* Construções */
 .entrance {

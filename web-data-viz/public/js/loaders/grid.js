@@ -13,7 +13,7 @@ function loadGrid() {
         const tRow = tile.positionRow;
         const tCol = tile.positionCol;
 
-        tileDiv.className=`tile ${tile.category} ${tile.name} ${tile.removable ? "removable" : ""}`;
+        tileDiv.className=`tile ${tile.category} ${tile.name} ${tile.removable ? "removable" : ""} ${tile.currentHp <= 0 ? "enclosure-broken" : ""}`;
         tileDiv.id = `r${tRow}_c${tCol}`;
         if(tile.dinosaur) {
             const dinoDiv = document.createElement("div");

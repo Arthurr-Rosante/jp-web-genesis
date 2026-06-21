@@ -73,8 +73,9 @@ const events = {
         if(!gameData || !gameData.park) return;
 
         const {park} = gameData;
-        const amount = BASE_BALANCE_INCREASE * park.rating;
+        const amount = Math.floor(BASE_BALANCE_INCREASE * park.rating);
         const newBalance = park.balance + amount;
+        if(newBalance > MAX_BALANCE_AMOUNT) return;
 
         // Atualizar sessionStorage
         park.balance = newBalance;

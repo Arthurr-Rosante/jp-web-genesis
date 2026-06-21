@@ -220,7 +220,8 @@ function releaseDinosaur(tile) {
                 {
                     positionRow: tile.positionRow,
                     positionCol: tile.positionCol,
-                    idSpecies: null
+                    idSpecies: null,
+                    removable: 1
                 }
             ]
         })

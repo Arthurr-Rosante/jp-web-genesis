@@ -146,7 +146,7 @@ function hatcherySlotHTML(species, slot) {
 
         const enclosureOptionHTML = (tile) => `
             <option value="r${tile.positionRow}_c${tile.positionCol}">
-            ${buildingsDataMap[tile.name].translatedName} (L: ${tile.positionRow + 1} | C: ${tile.positionCol + 1})
+            ${printBuildingNameWithPosition(tile)}
             </option>
         `;
 

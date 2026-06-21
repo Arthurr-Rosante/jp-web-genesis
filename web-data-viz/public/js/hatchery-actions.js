@@ -138,11 +138,11 @@ async function placeDinosaur(species, tile) {
         // Atualiza UI
         loadGameUI();
 
-        console.log(`Evento: ${species.name} colocado em ${buildingsDataMap[tile.name].translatedName} às ${new Date().toLocaleTimeString()}`);
+        console.log(`Evento: ${species.name} colocado em ${printBuildingNameWithPosition(tile)} às ${new Date().toLocaleTimeString()}`);
         toast({
             variant: "success",
             title: "Espécime Colocado",
-            message: `${species.name} colocado em ${buildingsDataMap[tile.name].translatedName}`
+            message: `${species.name} colocado em ${printBuildingNameWithPosition(tile)}`
         });
     }))
     .catch((error) => {

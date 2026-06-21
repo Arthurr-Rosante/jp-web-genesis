@@ -261,6 +261,10 @@
         element.classList.toggle("active");
     }
 
+    function printBuildingNameWithPosition(tile) {
+        return `${buildingsDataMap[tile.name].translatedName} (L: ${tile.positionRow + 1} | C: ${tile.positionCol + 1})`;
+    }
+
     function loadGameUI() {
         loadGrid();
         loadStatusbar();

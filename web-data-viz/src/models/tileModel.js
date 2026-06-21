@@ -43,20 +43,21 @@ async function getOneByParkId(idPark, positionRow, positionCol) {
     `;
     console.log("[tileModel] Executando a instrução SQL: \n" + instrucaoSql1);
     
-    let tile = await database.executar(instrucaoSql1);
-    if(tile.idSpecies) {
+    let tiles = await database.executar(instrucaoSql1);
+
+    if(tiles[0].idSpecies) {
         const instrucaoSql2 = `
             SELECT * FROM vw_dinosaurs 
             WHERE idPark = ${idPark} 
-            AND positionRow = ${tile.positionRow} 
-            AND positionCol = ${tile.positionCol}
+            AND positionRow = ${tiles[0].positionRow} 
+            AND positionCol = ${tiles[0].positionCol}
         `;
     
         const dinosaur = await database.executar(instrucaoSql2);
-        tile["dinosaur"] = dinosaur[0];
+        tiles[0]["dinosaur"] = dinosaur[0];
     };
 
-    return tile;
+    return tiles[0];
 }
 
 async function updateOne(idPark, positionRow, positionCol, fields = {}) {
@@ -92,8 +93,7 @@ async function updateMany(idPark, tiles) {
 
     for (let i = 0; i < tiles.length; i++) {
         const tile = tiles[i];
-        const updated = await updateOne(idPark, tile.positionRow, tile.positionCol, tile.fields)
-        .then((result) => result[0]);
+        const updated = await updateOne(idPark, tile.positionRow, tile.positionCol, tile.fields);
         updatedTiles.push(updated);
     }
 

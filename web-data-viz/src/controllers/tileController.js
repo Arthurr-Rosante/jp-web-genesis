@@ -70,7 +70,7 @@ function updateOne(req, res) {
         if(removable !== undefined) fieldsToUpdate["removable"] = removable;
 
         tileModel.updateOne(idPark, positionRow, positionCol, fieldsToUpdate)
-        .then((result) => res.status(200).send({message: "Tile atualizado com sucesso!", updated: result[0]}))
+        .then((result) => res.status(200).send({message: "Tile atualizado com sucesso!", updated: result}))
         .catch((error) => {
             console.error("[tileController] Erro: ", error);
             res.status(500).json({error: error.sqlMessage});

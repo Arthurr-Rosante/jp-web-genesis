@@ -153,6 +153,7 @@ const events = {
                         positionRow: tile.positionRow,
                         positionCol: tile.positionCol,
                         idSpecies: null,
+                        currentHp: 0,
                         removable: 1
                     }
                 ]
@@ -183,14 +184,6 @@ const events = {
                 message: `${dinosaur.name} fugiu de ${printBuildingNameWithPosition(tile)}!`
             })
             console.log(`Evento: "dinosaurEscape" em ${printBuildingNameWithPosition(tile)} às ${new Date().toLocaleTimeString()}`);
-
-
-
-
-
-
-
-            console.log("DEPOIS DE FUGA: ", data.updated[0]);
         }))
         .catch((error) => {
             toast({

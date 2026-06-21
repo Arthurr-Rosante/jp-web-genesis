@@ -261,7 +261,6 @@ FROM user u
 JOIN park p ON u.id = p.idUser
 JOIN tile t ON p.idUser = t.idPark
 LEFT JOIN species s ON t.idSpecies = s.id
-WHERE t.idSpecies IS NOT NULL
 GROUP BY userId;
 
 CREATE OR REPLACE VIEW vw_tiles

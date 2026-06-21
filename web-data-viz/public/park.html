@@ -218,6 +218,8 @@
             if(!EVENTS_ENABLED) return;
             events.randomEvent();
         }, EVENTS_INTERVAL_MS);
+
+        const dinoAttackTimer = generateDinosaurAttackTimers();
     }
 
     function submitEntranceForm(event) {

@@ -148,24 +148,30 @@
 <script src="./js/loaders/general.js"></script>
 <script>
     // Variáveis Globais
-    let REPAIR_FEE = 0.1;
-    let BASE_REPAIR_POINTS = 10;
-    let BASE_BALANCE_INCREASE = 50;
-    let MAX_BALANCE_AMOUNT = 999999;
+    let BASE_REPAIR_FEE = 0.1;                  // Taxa de reparo do Cercado
+    let BASE_REPAIR_HP = 10;                    // Qtd. de HP restaurada por ação de reparo
+    let BASE_BALANCE_INCREASE = 5;              // Qtd. de saldo incrementado por evento de "increaseBalance"
+    let MAX_BALANCE_AMOUNT = 999999;            // Qtd. máxima de saldo que pode ser atingida
 
-    // intervalo base de quantas vezes p/ segundo o progresso de incubação é contabilizado (influenciado por pouringRain)
-    let BASE_HATCH_INTERVAL_MS = 1 * 1 * 1000;
-    // intervalo base de incubação p/ todas as espécies (influenciado pelo ratingWeight)
-    let BASE_SPECIES_HATCH_INTERVAL_MS = 1 * 30 * 1000;
+    let BASE_AGGRESSIVENESS_MULTIPLER = 1;      // Multiplicador base da agressividade das espécies
+    let BASE_HATCH_SUCCESS_MULTIPLIER = 1;      // Multiplicador base da chance de eclosão das espécies
 
-    let AUTOSAVE_ENABLED = true;
-    let AUTOSAVE_INTERVAL_MS = 1 * 60 * 1000;
+    let BASE_HATCH_PROGRESS_MS = 1 * 1 * 1000;      // Qtd. de progresso realizado p/ segundo de incubação 
+    let SPECIES_HATCH_INTERVAL_MS = 1 * 30 * 1000;  // Intervalo padrão para qualquer espécie ser incubada
+
+    let AUTOSAVE_ENABLED = true;                // Ativa/desativa evento de "save" automático
+    let AUTOSAVE_INTERVAL_MS = 1 * 60 * 1000;   // Intervalo do evento de "save"
     
-    let INCREASE_BALANCE_ENABLED = true;
-    let INCREASE_BALANCE_INTERVAL_MS = 1 * 5 * 1000;
+    let INCREASE_BALANCE_ENABLED = true;                // Ativa/desativa evento de "increaseBalance"
+    let INCREASE_BALANCE_INTERVAL_MS = 1 * 5 * 1000;    // Intervalo do evento de "increaseBalance"
     
-    let EVENTS_ENABLED = false;
-    let EVENTS_INTERVAL_MS = 1 * 30 * 1000;
+    let EVENTS_ENABLED = true;                  // Ativa/desavitva eventos aleatórios
+    let EVENTS_INTERVAL_MS = 1 * 30 * 1000;     // Intervalo dos eventos aleatórios
+
+    let FLEES_ENABLED = true;                   // Ativa/desativa fugas de dinossauros
+    let ATTACKS_ENABLED = true;                 // Ativa/desativa ataques de dinossauros
+    let ATTACKS_INTERVAL_MS = 1 * 10 * 1000;    // Intervalo de ataques de dinossauros
+
 
     const speciesMap = {};
     const buildingsMap = {};

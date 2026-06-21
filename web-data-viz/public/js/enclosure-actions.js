@@ -46,7 +46,7 @@ function repairEnclosure(tile) {
     const {park} = gameData;
 
     // Checa insuficiência do saldo
-    const newBalance = park.balance - (tile.baseCost * REPAIR_FEE); 
+    const newBalance = park.balance - (tile.baseCost * BASE_REPAIR_FEE); 
     if(newBalance < 0) {
         toast({
             variant: "warn",
@@ -57,7 +57,7 @@ function repairEnclosure(tile) {
     }
     
     // Calcula novo HP do cercado (mantém na faixa 0-100)
-    const newHp = Math.max(0, Math.min(100, tile.currentHp + BASE_REPAIR_POINTS));
+    const newHp = Math.max(0, Math.min(100, tile.currentHp + BASE_REPAIR_HP));
     
     fetch(`/api/tiles/${tile.idPark}`, {
         method: "PUT",

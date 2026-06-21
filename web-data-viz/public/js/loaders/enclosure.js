@@ -100,7 +100,7 @@ function enclosureFooterHTML(tile) {
         <div class="enclosure-status-footer">
             ${enclosureHealthbarHTML(tile)}
             <div class="enclosure-actions">
-                <button id="repair-enclosure-btn" class="button--secondary"><i class="ph-fill ph-wrench"></i>Reparar (${tile.baseCost * REPAIR_FEE})</button>
+                <button id="repair-enclosure-btn" class="button--secondary"><i class="ph-fill ph-wrench"></i>Reparar (${tile.baseCost * BASE_REPAIR_FEE})</button>
                 ${tile.idUpgrade ? `<button id="upgrade-enclosure-btn" class="button--primary"><i class="ph-fill ph-coins"></i> Melhorar (${tile.upgradeCost})</button>` : ""}
             </div>
         </div>

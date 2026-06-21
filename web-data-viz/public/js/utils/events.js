@@ -84,7 +84,7 @@ const events = {
         // Atualizar UI
         loadParkBalance(newBalance);
 
-        console.log(`Evento: "increaseBalance" às ${new Date().toLocaleTimeString()}`);
+        console.log(`Evento: "increaseBalance" (+${amount} de saldo) às ${new Date().toLocaleTimeString()}`);
     },
     randomEvent: () => {
         toast({

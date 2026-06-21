@@ -37,7 +37,7 @@ function speciesCardHTML(species) {
         <p class="hatchery-title">${species.name.charAt(0).toUpperCase() + species.name.slice(1)}</p>
         <div class="hatchery-item-info">
             <p><span><i class="ph-fill ph-coins"></i> ${species.hatchCost}</span></p>
-            <p><span><i class="ph-fill ph-timer"></i> ${formatDinoHatchTime(BASE_SPECIES_HATCH_INTERVAL_MS * species.ratingWeight)}</span></p>
+            <p><span><i class="ph-fill ph-timer"></i> ${formatDinoHatchTime(SPECIES_HATCH_INTERVAL_MS * species.ratingWeight)}</span></p>
             <p><span><i class="ph-fill ph-egg-crack"></i> ${formatDinoHatchSuccess(species.hatchSuccessRate)}</span></p>
         </div>
         <div class="hatchery-item-footer">

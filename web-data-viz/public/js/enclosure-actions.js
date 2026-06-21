@@ -15,7 +15,6 @@ function goToHatchery() {
         togglePanel("hatchery-panel", {onToggle: loadHatchery});
     } else {
         toast({ 
-            variant: "warn", 
             title: "Operação Negada", 
             message: "Seu parque não possui nenhum laboratório de incubação."
         });
@@ -26,7 +25,6 @@ function goToHatchery() {
 function repairEnclosure(tile) {
     if(tile.currentHp >= tile.maxHp) {
         toast({
-            variant: "warn",
             title: "Operação Negada",
             message: `${buildingsDataMap[tile.name].translatedName} já está um brinco!`
         });
@@ -49,7 +47,6 @@ function repairEnclosure(tile) {
     const newBalance = park.balance - (tile.baseCost * BASE_REPAIR_FEE); 
     if(newBalance < 0) {
         toast({
-            variant: "warn",
             title: "Operação Negada",
             message: "Você não possui saldo suficiente!"
         });
@@ -103,7 +100,6 @@ function upgradeEnclosure(tile) {
     // Checa se Tile possui upgrades
     if(!tile.idUpgrade) {
         toast({
-            variant: "warn",
             title: "Operação Negada",
             message: `${buildingsDataMap[tile.name].translatedName} não possui mais melhorias!`
         });
@@ -113,7 +109,6 @@ function upgradeEnclosure(tile) {
     // Checa se Tile foi devidamente consertado
     if(tile.currentHp < tile.maxHp) {
         toast({
-            variant: "warn",
             title: "Operação Negada",
             message: `${buildingsDataMap[tile.name].translatedName} precisa estar 100% consertado!`
         });
@@ -136,7 +131,6 @@ function upgradeEnclosure(tile) {
     const newBalance = park.balance - tile.upgradeCost; 
     if(newBalance < 0) {
         toast({
-            variant: "warn",
             title: "Operação Negada",
             message: "Você não possui saldo suficiente!"
         });
@@ -195,7 +189,6 @@ function releaseDinosaur(tile) {
     // Checa se Tile foi devidamente consertado
     if(tile.currentHp < tile.maxHp) {
         toast({
-            variant: "warn",
             title: "Operação Negada",
             message: `${buildingsDataMap[tile.name].translatedName} precisa estar 100% consertado!`
         });

@@ -15,7 +15,6 @@ async function changeTile(oldTile, newTile) {
     const newBalance = park.balance - newTile.baseCost;
     if(newBalance < 0) {
         toast({
-            variant: "warn",
             title: "Operação Negada",
             message: "Você não possui saldo suficiente!"
         });

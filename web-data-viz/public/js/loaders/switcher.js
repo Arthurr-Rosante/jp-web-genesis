@@ -54,7 +54,6 @@ function loadTileSwitcher(selectedTile) {
             const selectedOpt = document.querySelector(".tile-item--selected");
             if(!selectedOpt) {
                 toast({
-                    variant: "warn",
                     title: "Operação Negada",
                     message: "Selecione uma construção antes de alterar!"
                 });

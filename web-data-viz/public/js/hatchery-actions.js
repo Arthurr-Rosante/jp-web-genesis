@@ -15,7 +15,6 @@ function incubateSpecies(species) {
     const emptySlot = document.querySelector(".slot--empty");
     if(!emptySlot) {
         toast({ 
-            variant: "warn", 
             title: "Operação Negada", 
             message: `Incubadora cheia! Não há espaços para incubar ${species.name}!` 
         });
@@ -26,7 +25,6 @@ function incubateSpecies(species) {
     const newBalance = park.balance - species.hatchCost;
     if (newBalance < 0) {
         toast({
-            variant: "warn",
             title: "Operação Negada",
             message: "Você não possui saldo suficiente!"
         });
@@ -99,7 +97,6 @@ async function placeDinosaur(species, tile) {
     // é preciocismo, dado que a este ponto tudo já deve estar nos conformes.
     if(tile.category !== "enclosure") {
         toast({
-            variant: "warn",
             title: "Operação Negada",
             message: `Este Tile não é um Cercado.`
         });

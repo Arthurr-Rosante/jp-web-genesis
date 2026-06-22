@@ -217,7 +217,7 @@ VALUES
         null,
 		'enclosure-1',
         'enclosure',
-        1, 100, default, 150
+        3, 100, default, 150
     ),
 	(
         null,
@@ -229,7 +229,7 @@ VALUES
         null,
 		'enclosure-3',
         'enclosure',
-        10, 500, 0, null
+        8, 500, 0, null
     ),
 	-- | CONSTRUÇÕES | --
 	(

@@ -165,15 +165,15 @@ const eventsDataMap = {
     "sabotage": {
         translatedName: "Sabotagem",
         description: "Todo cuidado é pouco. Um funcionário do seu Parque foi mandado embora e decidiu se vingar - ele desativou todos os sistemas de segurança do Parque!",
-        consequences: "A durabilidade de todos os Cercados do seu Parque caem em 50%",
-        spawnChance: 0.2,
+        consequences: "A vida de todos os Cercados do seu Parque caem em 25%",
+        spawnChance: 0.25,
         spriteUrl: imagesPath + "/events/sabotage.png"
     },
-    "pouring-rain": {
+    "pouringRain": {
         translatedName: "Chuva Torrencial",
         description: "O Clima tropical da Costa Rica é extremamente instável. Sob uma tempestade dessas proporções, as coisas no Parque vão ter de esperar.",
-        consequences: "Enquanto a chuva durar o atributo de Avaliação do seu Parque cai em 1 Estrela. Além disso, o tempo de incubação de todas as espécies aumenta em 33%",
-        spawnChance: 0.5,
+        consequences: "Enquanto a chuva durar o atributo de avaliação do seu Parque cai em 1 estrela. Além disso, o tempo de incubação de todas as espécies aumenta em 33%",
+        spawnChance: 0.33,
         spriteUrl: imagesPath + "/events/pouring-rain.png"
     }
 };

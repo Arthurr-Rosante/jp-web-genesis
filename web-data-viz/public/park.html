@@ -153,25 +153,28 @@
     let BASE_BALANCE_INCREASE = 5;              // Qtd. de saldo incrementado por evento de "increaseBalance"
     let MAX_BALANCE_AMOUNT = 999999;            // Qtd. máxima de saldo que pode ser atingida
 
-    let BASE_AGGRESSIVENESS_MULTIPLER = 1;      // Multiplicador base da agressividade das espécies
+    let BASE_AGGRESSIVENESS_MULTIPLIER = 1;      // Multiplicador base da agressividade das espécies
     let BASE_HATCH_SUCCESS_MULTIPLIER = 1;      // Multiplicador base da chance de eclosão das espécies
 
     let BASE_HATCH_PROGRESS_MS = 1 * 1 * 1000;      // Qtd. de progresso realizado p/ segundo de incubação 
     let SPECIES_HATCH_INTERVAL_MS = 1 * 30 * 1000;  // Intervalo padrão para qualquer espécie ser incubada
 
-    let AUTOSAVE_ENABLED = true;                // Ativa/desativa evento de "save" automático
+    let AUTOSAVE_ENABLED = true;               // Ativa/desativa evento de "save" automático
     let AUTOSAVE_INTERVAL_MS = 1 * 60 * 1000;   // Intervalo do evento de "save"
     
     let INCREASE_BALANCE_ENABLED = true;                // Ativa/desativa evento de "increaseBalance"
     let INCREASE_BALANCE_INTERVAL_MS = 1 * 5 * 1000;    // Intervalo do evento de "increaseBalance"
     
     let EVENTS_ENABLED = true;                  // Ativa/desavitva eventos aleatórios
-    let EVENTS_INTERVAL_MS = 1 * 30 * 1000;     // Intervalo dos eventos aleatórios
+    let EVENTS_INTERVAL_MS = 1 * 45 * 1000;     // Intervalo dos eventos aleatórios
+    let IS_RAINING = false;                     // Diz se evento "pouringRain" está ocorrendo no momento
+    let RATING_DECREASED_WHEN_RAINING = 1;      // Qtd. de estrelas perdidas enquanto chove
+    let BASE_RAIN_DURATION_MS = 1 * 15 * 1000;  // Duração do evento "pouringRain"
 
     let FLEES_ENABLED = true;                   // Ativa/desativa fugas de dinossauros
     let ATTACKS_ENABLED = true;                 // Ativa/desativa ataques de dinossauros
-    let ATTACKS_INTERVAL_MS = 1 * 10 * 1000;    // Intervalo de ataques de dinossauros
-
+    let BASE_ATTACK_DAMAGE = 25                 // Qtd. base de HP decrementada do cercado por ataque 
+    let ATTACKS_INTERVAL_MS = 1 * 10 * 1000;     // Intervalo de ataques de dinossauros
 
     const speciesMap = {};
     const buildingsMap = {};
@@ -257,6 +260,17 @@
         }
     }
 
+    function isOverlayOpen(elementId) {
+        const element = document.getElementById(elementId);
+        if(!element) return false;
+
+        if(element.closest(".overlay").classList.contains("open")) {
+            return true;
+        }
+
+        return false;
+    }
+
     function toggleEditorMode(element) {
         const currentMode = storage.get("JPWG_EDITOR_MODE") || false;
         storage.set("JPWG_EDITOR_MODE", !currentMode);
@@ -292,7 +306,7 @@
 
                 // Verifica se ataque ocorreu ou falhou
                 const successChance = Math.min(
-                    Math.pow(dinosaur.aggressiveness, 2) * BASE_AGGRESSIVENESS_MULTIPLER, 
+                    Math.pow(dinosaur.aggressiveness, 2) * BASE_AGGRESSIVENESS_MULTIPLIER, 
                     1.0
                 );
                 const failChance = Math.random();

@@ -73,7 +73,8 @@ const events = {
         if(!gameData || !gameData.park) return;
 
         const {park} = gameData;
-        const amount = Math.floor(BASE_BALANCE_INCREASE * park.rating);
+        const rating = IS_RAINING ? Math.max(park.rating - RATING_DECREASED_WHEN_RAINING, 0) : park.rating; 
+        const amount = Math.round((BASE_BALANCE_INCREASE + rating) * Math.max(rating, 1));    // Math.max() p/ impedir montante de zerar qnd rating for 0
         const newBalance = park.balance + amount;
         if(newBalance > MAX_BALANCE_AMOUNT) return;
 
@@ -87,13 +88,116 @@ const events = {
         console.log(`Evento: "increaseBalance" (+${amount} de saldo) às ${new Date().toLocaleTimeString()}`);
     },
     randomEvent: () => {
-        toast({
-            variant: "warn",
-            title: "EVENTO",
-            message: "ocorreu um evento!",
+        // Escolhe evento para ocorrer
+        const eventsNameList = Object.keys(eventsDataMap);
+        const eventName = eventsNameList[Math.floor(Math.random() * eventsNameList.length)];
+
+        // Impede evento de chuva de acumular
+        if(IS_RAINING && eventName === "pouringRain") return;
+
+        // Verifica se evento ocorreu ou falhou
+        const successChance = eventsDataMap[eventName].spawnChance;
+        const failChance = Math.random();
+
+        if(failChance < successChance) return;
+
+        events[eventName]();
+    },
+    sabotage: () => {
+        let gameData = storage.get("JPWG_DATA");
+        if(!gameData || !gameData.tiles || !gameData.park) return;
+
+        const tilesToUpdate = gameData.tiles
+        .filter(t => t.category === "enclosure" && t.currentHp > 0)
+        .map(t => {
+            t.currentHp = Math.max(
+                (t.currentHp - (t.maxHp * 0.25)) + t.durability, // remove 25% do HP total do Cercado (durabilidade influencia no valor final)
+                1
+            );  // Math.max() para impedir que o currentHp fique negativo ou que ele quebre
+
+            return {
+                positionRow: t.positionRow,
+                positionCol: t.positionCol,
+                currentHp: t.currentHp
+            };
         });
 
-        console.log(`Evento: "randomEvent" às ${new Date().toLocaleTimeString()}`);
+        fetch(`/api/tiles/${gameData.park.idUser}`, {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({tiles: tilesToUpdate})
+        })
+        .then(res => res.json().then(data => {
+            if(!res.ok) throw data.error;
+
+            // Atualiza sessionStorage
+            gameData.tiles = data.tiles;
+            storage.set("JPWG_DATA", gameData);
+
+            // Atualiza UI
+            loadGrid();
+            if(isOverlayOpen("enclosure-panel")) {
+                togglePanel("enclosure-panel");
+            }
+
+            toast({
+                variant: "warn",
+                title: eventsDataMap["sabotage"].translatedName,
+                message: eventsDataMap["sabotage"].consequences
+            });
+            console.log(`Evento: "sabotage" às ${new Date().toLocaleTimeString()}`);
+        }))
+        .catch((error) => {
+            toast({
+                variant: "destructive",
+                title: "Erro ao sabotar Cercados",
+                message: error
+            });
+        });
+    },
+    pouringRain: () => {
+        let gameData = storage.get("JPWG_DATA");
+
+        // Por precaução, previne timers duplicados 
+        if(activeTimers.has("pouringRain")) activeTimers.get("pouringRain").destroy();
+        
+        // Altera parâmetros globais
+        IS_RAINING = true;
+        BASE_AGGRESSIVENESS_MULTIPLIER = 2;
+        BASE_HATCH_PROGRESS_MS = 1 * 0.67 * 1000;
+        
+        // Cria timer de chuva
+        const rainTimer = createTimer("pouringRain", () => {
+            let gameData = storage.get("JPWG_DATA");
+
+            // Retorna parâmetros globais para o normal 
+            IS_RAINING = false;
+            BASE_AGGRESSIVENESS_MULTIPLIER = 1;
+            BASE_HATCH_PROGRESS_MS = 1 * 1 * 1000;
+
+            // Atualiza UI
+            const rainPanel = document.getElementById("rain-panel");
+            if(rainPanel) rainPanel.classList.remove("rain");
+            if(gameData) loadParkRating(gameData.park.rating);
+        }, BASE_RAIN_DURATION_MS, true);    // em modo timeout
+        
+        // Atualiza UI
+        if(gameData) loadParkRating(Math.max(gameData.park.rating - RATING_DECREASED_WHEN_RAINING, 0));
+
+        let rainPanel = document.getElementById("rain-panel");
+        if(!rainPanel) {
+            rainPanel = document.createElement("div");
+            rainPanel.id = "rain-panel";
+            document.body.appendChild(rainPanel);
+        };
+        rainPanel.classList.add("rain");
+
+        toast({
+            variant: "warn",
+            title: eventsDataMap["pouringRain"].translatedName,
+            message: eventsDataMap["pouringRain"].consequences
+        });
+        console.log(`Evento: "pouringRain" às ${new Date().toLocaleTimeString()}`);
     },
     dinosaurAttack: (tile) => {
         let gameData = storage.get("JPWG_DATA");
@@ -113,6 +217,10 @@ const events = {
         if(FLEES_ENABLED && newHp <= 0) {
             events.dinosaurEscape(tile);
             return;   
+        } else if (!FLEES_ENABLED && newHp <= 0) {
+            // quando fugas estiverem desabilitadas e o cercado estiver prestes a quebrar
+            // impede que dinossauros continuem a atacar o cercado
+            return;
         }
 
         fetch(`/api/tiles/${tile.idPark}`, {
@@ -210,7 +318,7 @@ const events = {
 
 function loadRightEnclosure(tile) {
     const enclosurePanel = document.getElementById("enclosure-panel");
-    if(enclosurePanel.closest(".overlay").classList.contains("open")) {
+    if(isOverlayOpen("enclosure-panel")) {
         if(enclosurePanel.classList.contains(`r${tile.positionRow}_c${tile.positionCol}`)) {
             loadEnclosure(tile);
         }

@@ -205,9 +205,9 @@ const events = {
         const dinosaur = tile.dinosaur;
 
         // Calcula o dano do ataque
-        const weight_factor = Number(dinosaur.weightInKilograms) / 1000;    // leva em conta o peso do dinossauro p/ aumentar o dano
+        const weightFactor = Number(dinosaur.weightInKilograms) / 1000;    // leva em conta o peso do dinossauro p/ aumentar o dano
         const damage = Math.max(
-            Math.floor(((BASE_ATTACK_DAMAGE * dinosaur.aggressiveness) + weight_factor) - tile.durability),  // Math.floor() p/ evitar número quebrado
+            Math.floor(((BASE_ATTACK_DAMAGE * dinosaur.aggressiveness) + weightFactor) - tile.durability),  // Math.floor() p/ evitar número quebrado
             1
         );  // Math.max() pois quero que, em casos onde a durabilidade abater todo o dano recebido, o ataque dê ao menos 1pt de dano
 

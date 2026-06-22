@@ -3,11 +3,14 @@ function loadEnclosure(tile) {
 
     const panel = document.getElementById("enclosure-panel");
     if(!panel) return;
+    panel.innerHTML = "";
+
+    // Permite saber a qual cercado o painél pertence
+    panel.className = `panel r${tile.positionRow}_c${tile.positionCol}`;
 
     if(tile.currentHp <= 0) {
         panel.classList.add("broken");
     }
-    panel.innerHTML = "";
 
     if(tile.idSpecies) {
         // Carrega UI de cercado com dinossauro
@@ -128,4 +131,9 @@ function enclosureHealthbarHTML(tile) {
             <span>${tile.currentHp}/${tile.maxHp}</span>
         </div>
     `;
+}
+
+function cleanEnclosureReference() {
+    const panel = document.getElementById("enclosure-panel");
+    panel.className = "panel";
 }

@@ -97,7 +97,6 @@ const events = {
     },
     dinosaurAttack: (tile) => {
         let gameData = storage.get("JPWG_DATA");
-        let updatedTile = tile;
 
         const dinosaur = tile.dinosaur;
 
@@ -109,35 +108,52 @@ const events = {
         );  // Math.max() pois quero que, em casos onde a durabilidade abater todo o dano recebido, o ataque dê ao menos 1pt de dano
 
         const newHp = Math.max(tile.currentHp - damage, 0);    // Math.max() p/ impedir de HP ficar negativo
-        updatedTile.currentHp = newHp;
 
-        // Atualiza sessionStorage
-        gameData.tiles = gameData.tiles.map(t => {
-            if(t.positionRow === tile.positionRow && t.positionCol === tile.positionCol) {
-                return updatedTile;
-            }
-            return t;
-        });
-        storage.set("JPWG_DATA", gameData);
-        
         // Verifica Fuga de Dinossauro
-        if(FLEES_ENABLED && updatedTile.currentHp <= 0) {
-            events.dinosaurEscape(updatedTile);
+        if(FLEES_ENABLED && newHp <= 0) {
+            events.dinosaurEscape(tile);
             return;   
         }
 
-        // Atualiza UI (apenas se painel do cercado estiver aberto)
-        loadGrid();
-        const enclosurePanel = document.getElementById("enclosure-panel");
-        if(enclosurePanel.closest(".overlay").classList.contains("open")) {
-            loadEnclosure(tile);
-        }
-
-        toast({
-            title: "Ataque à Cercado",
-            message: `${dinosaur.name} está atacando ${printBuildingNameWithPosition(tile)}!`
+        fetch(`/api/tiles/${tile.idPark}`, {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                tiles: [
+                    {
+                        positionRow: tile.positionRow,
+                        positionCol: tile.positionCol,
+                        currentHp: newHp
+                    }
+                ]
+            })
         })
-        console.log(`Evento: "dinosaurAttack" em ${printBuildingNameWithPosition(tile)} às ${new Date().toLocaleTimeString()}`);
+        .then(res => res.json().then(data => {
+            if(!res.ok) {
+                throw data.error;
+            }
+
+            // Atualiza sessionStorage
+            gameData.tiles = data.tiles;
+            storage.set("JPWG_DATA", gameData);
+
+            // Atualiza UI
+            loadGrid();
+            loadRightEnclosure(data.updated[0]);
+
+            toast({
+                title: "Ataque à Cercado",
+                message: `${dinosaur.name} está atacando ${printBuildingNameWithPosition(tile)}!`
+            })
+            console.log(`Evento: "dinosaurAttack" em ${printBuildingNameWithPosition(tile)} às ${new Date().toLocaleTimeString()}`);
+        }))
+        .catch((error) => {
+            toast({
+                variant: "destructive",
+                title: "Erro no ataque à Cercado",
+                message: error
+            })
+        })
     },
     dinosaurEscape: (tile) => {
         let gameData = storage.get("JPWG_DATA");
@@ -173,10 +189,7 @@ const events = {
 
             // Atualiza UI
             loadGameUI();
-            const enclosurePanel = document.getElementById("enclosure-panel");
-            if(enclosurePanel.closest(".overlay").classList.contains("open")) {
-                loadEnclosure(data.updated[0]);
-            }
+            loadRightEnclosure(data.updated[0]);
 
             toast({
                 variant: "warn",
@@ -194,3 +207,12 @@ const events = {
         })
     },
 };
+
+function loadRightEnclosure(tile) {
+    const enclosurePanel = document.getElementById("enclosure-panel");
+    if(enclosurePanel.closest(".overlay").classList.contains("open")) {
+        if(enclosurePanel.classList.contains(`r${tile.positionRow}_c${tile.positionCol}`)) {
+            loadEnclosure(tile);
+        }
+    }
+}

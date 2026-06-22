@@ -253,6 +253,7 @@
         if (event.currentTarget === event.target) {
             event.target.classList.replace("open", "closed");
             cleanSelectedTiles();
+            cleanEnclosureReference();
         }
     }
 

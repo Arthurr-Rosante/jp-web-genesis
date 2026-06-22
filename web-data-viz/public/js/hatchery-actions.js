@@ -71,15 +71,28 @@ function incubateSpecies(species) {
 function hatchSpecies(species, slot) {
     const timer = activeTimers.get(`hatchery-${slot.id}`);
     if(timer) timer.destroy();
-    
-    slot.classList.replace("slot--hatching", "slot--done");
-    loadHatcherySlots();
 
-    toast({
-        variant: "success",
-        title: "Incubação Concluída",
-        message: `O embrião de ${species.name} está pronto.`
-    });
+    // Verifica se incubação deu certo
+    const successChance = HATCH_FAILS_ENABLED ? species.hatchSuccessRate * BASE_HATCH_SUCCESS_MULTIPLIER : 1;
+    const failChance = Math.random();
+
+    if(failChance > successChance) {
+        toast({
+            variant: "destructive",
+            title: "Falha na Incubação",
+            message: `O embrião de ${species.name} teve de ser descartado`
+        });
+        slot.classList.replace("slot--hatching", "slot--empty");    // se falhar, slot fica vazio
+    } else {
+        toast({
+            variant: "success",
+            title: "Incubação Concluída",
+            message: `O embrião de ${species.name} está pronto.`
+        });
+        slot.classList.replace("slot--hatching", "slot--done");     // se suceder, slot fica concluído
+    }
+
+    loadHatcherySlots();
 }
 
 async function placeDinosaur(species, tile) {

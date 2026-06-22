@@ -139,11 +139,17 @@ function enclosureFooterHTML(tile) {
 function enclosureHealthbarHTML(tile) {
     const hpInPercentage = Math.round((tile.currentHp / tile.maxHp) * 100);
 
+    const bgColor = hpInPercentage <= 25
+        ? "var(--accent)"
+        : hpInPercentage <= 65
+            ? "var(--primary)"
+            : "var(--secondary)";
+
     return `
         <div class="enclosure-health">
             <span>HP:</span>
             <div class="enclosure-healthbar-wrapper">
-                <div id="enclosure-healthbar" style="width:${hpInPercentage}%;"></div>
+                <div id="enclosure-healthbar" style="width:${hpInPercentage}%;background-color:${bgColor};"></div>
             </div>
             <span>${tile.currentHp}/${tile.maxHp}</span>
         </div>

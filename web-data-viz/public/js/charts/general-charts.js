@@ -60,7 +60,7 @@ function balanceChartConfig(balance) {
             tension: 0.4,
             pointRadius: 4,
             borderWidth: 2,
-            backgroundColor: "#3e4a1b20",
+            backgroundColor: "#3e4a1b60",
             borderColor: "#3e4a1b"
         }]
     }
@@ -68,11 +68,26 @@ function balanceChartConfig(balance) {
     config["options"] = {
         responsive: true,
         scales: {
-            x: {beginAtZero: true},
+            x: {
+                beginAtZero: true,
+                grid: { color: "#6B4F2A80" },
+                ticks: {
+                    color: "#d0c1a1",
+                },
+            },
             y: {
                 beginAtZero: true,
                 min: 0,
                 suggestedMax: 10000,
+                ticks: {
+                    color: "#d0c1a1",
+                },
+                grid: { color: "#6B4F2A80" }
+            }
+        },
+        plugins: {
+            legend: {
+                labels: { color: "#d0c1a1" }
             }
         }
     }
@@ -105,7 +120,7 @@ function speciesChartConfig(tiles) {
     const tilesWithDinosaur = tiles.filter(t => t.idSpecies && t.dinosaur);
 
     config["data"] = {
-        labels: ["Carnívoros", "Herbívoros", "Onívoros"],
+        labels: ["Espécimes"],
         datasets: [
             {
                 label: "Carnívoros",
@@ -144,14 +159,26 @@ function speciesChartConfig(tiles) {
         scales: {
             x: {
                 beginAtZero: true,
-                ticks: {
-                    stepSize: 2
-                },
                 min: 0,
                 suggestedMax: 10,
+                ticks: {
+                    color: "#d0c1a1",
+                    stepSize: 2
+                },
+                grid: { color: "#6B4F2A80" }
             },
             y: {
                 beginAtZero: true,
+                ticks: {
+                    color: "#d0c1a1",
+                    minRotation: 90,
+                },
+                grid: { color: "#6B4F2A80" }
+            }, 
+        },
+        plugins: {
+            legend: {
+                labels: { color: "#d0c1a1" }
             }
         }
     }

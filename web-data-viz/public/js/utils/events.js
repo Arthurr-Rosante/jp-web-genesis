@@ -249,7 +249,6 @@ const events = {
             // Atualiza UI
             loadGrid();
             loadRightEnclosure(data.updated[0]);
-            updateSpeciesChart(gameData.tiles);
 
             toast({
                 title: "Ataque à Cercado",
@@ -300,6 +299,8 @@ const events = {
             // Atualiza UI
             loadGameUI();
             loadRightEnclosure(data.updated[0]);
+            updateSpeciesChart(gameData.tiles);
+            loadGeneralInfo(gameData);
 
             toast({
                 variant: "warn",

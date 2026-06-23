@@ -103,11 +103,11 @@ function updateSpeciesChart(tiles) {
     const tilesWithDinosaur = tiles.filter(t => t.idSpecies && t.dinosaur);
 
     // Dataset dos Carnívoros
-    chart.data.datasets[0].data = tilesWithDinosaur.filter(t => t.dinosaur.diet === "carnívoro");
+    chart.data.datasets[0].data = [tilesWithDinosaur.filter(t => t.dinosaur.diet === "carnívoro").length];
     // Dataset dos Herbívoros
-    chart.data.datasets[1].data = tilesWithDinosaur.filter(t => t.dinosaur.diet === "herbívoro");
+    chart.data.datasets[1].data = [tilesWithDinosaur.filter(t => t.dinosaur.diet === "herbívoro").length];
     // Dataset dos Onívoros
-    chart.data.datasets[2].data = tilesWithDinosaur.filter(t => t.dinosaur.diet === "onívoro");
+    chart.data.datasets[2].data = [tilesWithDinosaur.filter(t => t.dinosaur.diet === "onívoro").length];
 
     chart.update();
 }
@@ -153,7 +153,6 @@ function speciesChartConfig(tiles) {
     }
 
     config["options"] = {
-        barThickness: 20,
         responsive: true,
         indexAxis: "y",
         scales: {

@@ -52,8 +52,17 @@ function loadSpeciesList(listElement, tiles) {
         speciesItem.innerHTML = generalSpeciesCardHTML(tile);
         speciesItem.onclick = () => togglePanel("general-panel", {
             onToggle: () => {
+                const freshGameData = storage.get("JPWG_DATA");
+                if(!freshGameData) return;
+                
+                // Pega tile atualizado
+                const freshTile = freshGameData.tiles.find(
+                    t => t.positionRow === tile.positionRow && t.positionCol === tile.positionCol
+                );
+                if(!freshTile) return;
+
                 togglePanel("enclosure-panel");        
-                loadEnclosure(tile);
+                loadEnclosure(freshTile);
             }
         });
 

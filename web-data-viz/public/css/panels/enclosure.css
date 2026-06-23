@@ -133,12 +133,11 @@
 }
 
 .enclosure-radar canvas {
-    margin-left: 12%;
+    margin-left: 18%;
 }
 
 /* Cercado - Lista de Informações */
 .enclosure-info {
-    min-width: 0;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -150,8 +149,6 @@
     font-size: 16px;
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.3rem 14px;
 }
 
 .enclosure-info ul li {

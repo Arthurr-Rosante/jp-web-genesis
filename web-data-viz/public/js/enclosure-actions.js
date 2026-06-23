@@ -84,6 +84,7 @@ function repairEnclosure(tile) {
         // Atualiza UI
         loadGameUI();
         loadEnclosure(data.updated[0]);
+        updateBalanceChart(newBalance);
 
         console.log(`Evento: ${tile.name} reparado às ${new Date().toLocaleTimeString()}`);
     }))
@@ -234,6 +235,7 @@ function releaseDinosaur(tile) {
         // Atualiza UI
         loadGameUI();
         loadEnclosure(data.updated[0]);
+        updateSpeciesChart(gameData.tiles);
 
         toast({
             variant: "success",

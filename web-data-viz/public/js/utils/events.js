@@ -84,6 +84,7 @@ const events = {
 
         // Atualizar UI
         loadParkBalance(newBalance);
+        updateBalanceChart(newBalance);
 
         console.log(`Evento: "increaseBalance" (+${amount} de saldo) às ${new Date().toLocaleTimeString()}`);
     },
@@ -248,6 +249,7 @@ const events = {
             // Atualiza UI
             loadGrid();
             loadRightEnclosure(data.updated[0]);
+            updateSpeciesChart(gameData.tiles);
 
             toast({
                 title: "Ataque à Cercado",

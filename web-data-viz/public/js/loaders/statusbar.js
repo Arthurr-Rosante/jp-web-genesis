@@ -16,6 +16,9 @@ function loadParkName(name) {
 function loadParkBalance(balance) {
     const pParkBalance = document.getElementById("park-balance");
     pParkBalance.innerHTML = Number(balance).toLocaleString("pt-br");
+
+    const spanGeneralParkBalance = document.getElementById("general-park-balance");
+    spanGeneralParkBalance.innerHTML = Number(balance).toLocaleString("pt-br");
 }
 function loadParkRating(rating) {
     const pParkRating = document.getElementById("park-rating");    

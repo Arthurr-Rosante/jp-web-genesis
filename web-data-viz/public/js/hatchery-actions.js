@@ -60,6 +60,7 @@ function incubateSpecies(species) {
     // Atualiza UI
     loadParkBalance(newBalance);
     loadHatcherySlots();
+    updateBalanceChart(newBalance);
 
     toast({
         variant: "success",
@@ -153,6 +154,7 @@ async function placeDinosaur(species, tile) {
 
         // Atualiza UI
         loadGameUI();
+        updateSpeciesChart(gameData.tiles);
 
         console.log(`Evento: ${species.name} colocado em ${printBuildingNameWithPosition(tile)} às ${new Date().toLocaleTimeString()}`);
         toast({

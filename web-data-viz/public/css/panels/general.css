@@ -1,0 +1,204 @@
+#general-panel {
+    background-image: url('../../assets/images/visitor-center-inside.png');
+}
+
+.general-content {
+    background-color: rgba(26, 20, 7, 0.9);
+    height: stretch;
+    border-radius: var(--radius);
+
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 16px;
+    padding: 8px;
+}
+
+.content--left,
+.content--right {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.content--left-header {
+    font-family: "Courier Prime", monospace, sans-serif;
+    
+    background-color: var(--surface);
+    padding: 8px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 16px;
+}
+.content--left-header span {
+    font-family: "Playfair Display", sans-serif;
+    color: var(--primary);
+    font-weight: bold;
+    font-style: italic;
+}
+
+#general-kpi-list {
+    font-family: "Courier Prime", monospace, sans-serif;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 16px 0;
+}
+
+.general-kpi {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    padding: 6px;
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 120px;
+    height: 120px;
+}
+
+.general-kpi .kpi-header {
+    text-align: center;
+    font-size: 14px;
+}
+
+.general-kpi .kpi-content {
+    font-family: "Playfair Display", sans-serif;
+    font-weight: bold;
+    font-size: 32px;
+    font-style: italic;
+    color: var(--primary);
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.general-kpi .kpi-content i {
+    margin-top: 6px;
+}
+
+.general-kpi .kpi-footer {
+    height: 100%;
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: bold;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.general-kpi .kpi-footer span {
+    font-style: italic;
+    color: var(--accent);
+}
+
+.balance-chart,
+.species-diet {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.balance-chart h3,
+.species-diet h3 {
+    font-family: "Courier Prime", monospace, sans-serif;
+    
+    background-color: var(--surface);
+    padding: 4px 8px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    
+    font-weight: normal;
+    font-style: italic;
+    font-size: 16px;
+}
+
+.balance-chart canvas,
+.species-diet canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.general-species {
+    font-family: "Courier Prime", monospace, sans-serif;
+    background-color: var(--surface);
+    padding: 4px 8px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    
+    font-weight: normal;
+    font-style: italic;
+    font-size: 16px;
+}
+
+#general-species-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 0px;
+    overflow-y: auto;
+    height: 240px;
+}
+
+.species-item {
+    font-family: "Courier Prime", monospace, sans-serif;
+    background-color: var(--surface);
+    padding: 4px 8px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.species-item:hover {
+    border-color: var(--primary);
+    cursor: pointer;
+}
+
+.species-item .species-image {
+    position: relative;
+    background-color: var(--info);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.species-icon {
+    width: 56px;
+    height: auto;
+    display: block;
+}
+
+.frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.species-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.species-info .enclosure-name {
+    display: flex;
+    justify-content: space-between;
+}
+
+.enclosure-name span {
+    font-weight: bold;
+    font-style: italic;
+    color: var(--text-muted);
+}

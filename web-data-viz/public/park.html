@@ -35,7 +35,7 @@
             </h3>
         </div>
         <div class="sidebar-body">
-            <button id="general-panel-toggler" class="sidebar-item" onclick="togglePanel('general-panel')">
+            <button id="general-panel-toggler" class="sidebar-item" onclick="togglePanel('general-panel', {onToggle: loadGeneral})">
                 <i class="ph-fill ph-binoculars"></i>
                 <p>Visão Geral</p>
             </button>
@@ -88,6 +88,66 @@
     <div class="overlay closed" onclick="closeOverlay(event)">
         <div id="general-panel" class="panel">
             <h3 class="panel-title">Visao Geral do Parque</h3>
+            <div class="general-content">
+                <div class="content--left">
+                    <div class="content--left-header">
+                        <p>Parque: <span id="general-park-name">Park Name</span></p>
+                        <p>Saldo<i class="ph-fill ph-coins"></i> <span id="general-park-balance">0</span></p>
+                    </div>
+                    <ul id="general-kpi-list">
+                        <li class="general-kpi">
+                            <div class="kpi-header">
+                                <p>Avaliação Atual</p>
+                            </div>
+                            <div class="kpi-content">
+                                <span id="park-rating-kpi">0</span>
+                                <i class="ph-fill ph-star"></i>
+                            </div>
+                            <div class="kpi-footer">
+                                <p id="park-rating-kpi-footer"></p>
+                            </div>
+                        </li>
+                        <li class="general-kpi">
+                            <div class="kpi-header">
+                                <p>Construções Distintas</p>
+                            </div>
+                            <div class="kpi-content">
+                                <span id="park-buildings-kpi">0</span>
+                            </div>
+                            <div class="kpi-footer">
+                                <p>de um total de <span id="park-buildings-kpi-footer">0</span></p>
+                            </div>
+                        </li>
+                        <li class="general-kpi">
+                            <div class="kpi-header">
+                                <p>Espécimes Distintos</p>
+                            </div>
+                            <div class="kpi-content">
+                                <span id="park-species-kpi">0</span>
+                            </div>
+                            <div class="kpi-footer">
+                                <p>de um total de <span id="park-species-kpi-footer">0</span></p>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="balance-chart">
+                        <h3>Variação do Saldo do Parque</h3>
+                        <canvas id="park-balance-chart"></canvas>
+                    </div>
+                </div>
+                <div class="content--right">
+                    <div class="species-diet">
+                        <h3>Proporção de espécimes por dieta</h3>
+                        <canvas id="species-diet-chart"></canvas>
+                    </div>
+                    <div>
+                        <p class="general-species">Espécimes do Parque</p>
+                        <ul id="general-species-list">
+                            <!-- carregado dinamicamente... -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -146,6 +206,14 @@
 <script src="./js/loaders/hatchery.js"></script>
 <script src="./js/loaders/enclosure.js"></script>
 <script src="./js/loaders/general.js"></script>
+<!-- SCRIPTS - Actions -->
+<script src="./js/switcher-actions.js"></script>
+<script src="./js/hatchery-actions.js"></script>
+<script src="./js/enclosure-actions.js"></script>
+<!-- <script src="./js/general-actions.js"></script> -->
+<!-- SCRIPTS - Charts -->
+<script src="./js/charts/enclosure-charts.js"></script>
+<script src="./js/charts/general-charts.js"></script>
 <script>
     // Variáveis Globais
     let BASE_REPAIR_FEE = 0.1;                  // Taxa de reparo do Cercado
@@ -179,6 +247,7 @@
 
     const speciesMap = {};
     const buildingsMap = {};
+    const activeCharts = new Map();
 
     function onPageLoad() {
         // Redireciona caso não esteja logado
@@ -206,6 +275,7 @@
         
         // Carrega UI
         loadGameUI();
+        createGeneralCharts();
         
         // Inicializa Timers
         const autosaveTimer = createTimer("autosave", () => {

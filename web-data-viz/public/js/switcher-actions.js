@@ -42,6 +42,7 @@ async function changeTile(oldTile, newTile) {
 
         storage.set("JPWG_DATA", gameData);
         loadGameUI();
+        updateBalanceChart(newBalance);
 
         toast({
             variant: "success",

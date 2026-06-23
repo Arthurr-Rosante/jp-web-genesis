@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="./css/globals.css">
     <link rel="stylesheet" href="./css/park.css">
     <link rel="stylesheet" href="./css/panel.css">
+    <link rel="stylesheet" href="./css/dev.css">
     <link rel="stylesheet" href="./css/panels/tile-switcher.css">
     <link rel="stylesheet" href="./css/panels/entrance.css">
     <link rel="stylesheet" href="./css/panels/general.css">
@@ -20,7 +21,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/index.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body onload="onPageLoad()">
+<body onload="onPageLoad()" onkeydown="triggerDevScreen(event)">
     <div id="rain-panel"></div>
 
     <!-- SideBar -->
@@ -186,6 +187,83 @@
         </div>
     </div>
 
+    <!-- Tela do Desenvolvedor -->
+    <div id="dev-screen" class="closed">
+        <!-- Controles de Incubação -->
+        <div class="dev-item-group">
+            <div class="dev-item">
+                <label for="dev-ipt-hatch-fails">Incubação (Falhas)</label>
+                <select id="dev-ipt-hatch-fails" onchange="toggleFails(event)">
+                    <option value="true" selected>Ativado</option>
+                    <option value="false">Desativado</option>
+                </select>
+            </div>
+            <div class="dev-item">
+                <label for="dev-hatch-success-rate">Incubação (Sucesso)</label>
+                <select id="dev-hatch-success-rate" onchange="setHatchSuccessMultiplier(event)">
+                    <option value="0">Nula (0%)</option>
+                    <option value="0.5">Baixa (50%)</option>
+                    <option value="1" selected>Normal</option>
+                    <option value="99">Infalível (100%)</option>
+                </select>
+            </div>
+            <div class="dev-item">
+                <label for="dev-hatch-progress">Incubação (Velocidade)</label>
+                <select id="dev-hatch-progress" onchange="setHatchProgress(event)">
+                    <option value="0.5">Demorada (0.5x)</option>
+                    <option value="1" selected>Normal</option>
+                    <option value="2">Acelerada (2x)</option>
+                    <option value="99">Instantânea</option>
+                </select>
+            </div>
+        </div>
+        <!-- Controles de Cercados/Espécies -->
+        <div class="dev-item-group">
+            <div class="dev-item">
+                <label for="dev-ipt-enclosure-attacks">Cercados (Ataque)</label>
+                <select id="dev-ipt-enclosure-attacks" onchange="toggleEnclosureAttacks(event)">
+                    <option value="true" selected>Ativado</option>
+                    <option value="false">Desativado</option>
+                </select>
+            </div>
+            <div class="dev-item">
+                <label for="dev-ipt-enclosure-flees">Cercados (Fuga)</label>
+                <select id="dev-ipt-enclosure-flees" onchange="toggleEnclosureFlees(event)">
+                    <option value="true" selected>Ativado</option>
+                    <option value="false">Desativado</option>
+                </select>
+            </div>
+            <div class="dev-item">
+                <label for="dev-species-aggressiveness">Dinossauros (Agressividade)</label>
+                <select id="dev-species-aggressiveness" onchange="setSpeciesAggressivinessMultiplier(event)">
+                    <option value="0">Pacíficos</option>
+                    <option value="0.5">Calmos</option>
+                    <option value="1" selected>Normal</option>
+                    <option value="2">Agressivos</option>
+                    <option value="99">Caóticos</option>
+                </select>
+            </div>
+        </div>
+        <!-- Controles de Eventos -->
+        <div class="dev-item-group">
+            <div class="dev-item">
+                <label for="dev-ipt-events">Eventos Randômicos</label>
+                <select id="dev-ipt-events" onchange="toggleRandomEvents(event)">
+                    <option value="true" selected>Ativado</option>
+                    <option value="false">Desativado</option>
+                </select>
+            </div>
+            <div class="dev-item">
+                <p>Eventos (Sabotagem)</p>
+                <button id="dev-events-sabotage" class="button--secondary" onclick="events.sabotage()">Chamar</button>
+            </div>
+            <div class="dev-item">
+                <p>Eventos (Chuva)</p>
+                <button id="dev-events-sabotage" class="button--secondary" onclick="events.pouringRain()">Chamar</button>
+            </div>
+        </div>
+    </div>
+
 <!-- SCRIPTS - Utilitários -->
 <script src="./js/utils/storage.js"></script>
 <script src="./js/utils/toggler.js"></script>
@@ -205,7 +283,7 @@
 <script src="./js/switcher-actions.js"></script>
 <script src="./js/hatchery-actions.js"></script>
 <script src="./js/enclosure-actions.js"></script>
-<!-- <script src="./js/general-actions.js"></script> -->
+<script src="./js/dev-actions.js"></script>
 <!-- SCRIPTS - Charts -->
 <script src="./js/charts/enclosure-charts.js"></script>
 <script src="./js/charts/general-charts.js"></script>
@@ -213,19 +291,19 @@
     // Variáveis Globais
     let BASE_REPAIR_FEE = 0.1;                  // Taxa de reparo do Cercado
     let BASE_REPAIR_HP = 10;                    // Qtd. de HP restaurada por ação de reparo
-    let BASE_BALANCE_INCREASE = 5;              // Qtd. de saldo incrementado por evento de "increaseBalance"
-    let MAX_BALANCE_AMOUNT = 999999;            // Qtd. máxima de saldo que pode ser atingida
-
-    let BASE_AGGRESSIVENESS_MULTIPLIER = 1;      // Multiplicador base da agressividade das espécies
+    
+    let BASE_AGGRESSIVENESS_MULTIPLIER = 1;     // Multiplicador base da agressividade das espécies
     let BASE_HATCH_SUCCESS_MULTIPLIER = 1;      // Multiplicador base da chance de eclosão das espécies
-
-    let BASE_HATCH_PROGRESS_MS = 1 * 999 * 1000;    // Qtd. de progresso realizado p/ segundo de incubação 
+    
+    let BASE_HATCH_PROGRESS_MS = 1 * 1 * 1000;      // Qtd. de progresso realizado p/ segundo de incubação 
     let HATCH_FAILS_ENABLED = true;                 // Ativa/desativa chance de incubações falharem 
     let SPECIES_HATCH_INTERVAL_MS = 1 * 30 * 1000;  // Intervalo padrão para qualquer espécie ser incubada
-
-    let AUTOSAVE_ENABLED = true;               // Ativa/desativa evento de "save" automático
-    let AUTOSAVE_INTERVAL_MS = 1 * 60 * 1000;   // Intervalo do evento de "save"
     
+    let AUTOSAVE_ENABLED = true;               // Ativa/desativa evento de "save" automático
+    let AUTOSAVE_INTERVAL_MS = 1 * 60 * 1000;  // Intervalo do evento de "save"
+    
+    let BASE_BALANCE_INCREASE = 5;                      // Qtd. de saldo incrementado por evento de "increaseBalance"
+    let MAX_BALANCE_AMOUNT = 999999;                    // Qtd. máxima de saldo que pode ser atingida
     let INCREASE_BALANCE_ENABLED = true;                // Ativa/desativa evento de "increaseBalance"
     let INCREASE_BALANCE_INTERVAL_MS = 1 * 5 * 1000;    // Intervalo do evento de "increaseBalance"
     
@@ -238,7 +316,9 @@
     let FLEES_ENABLED = true;                   // Ativa/desativa fugas de dinossauros
     let ATTACKS_ENABLED = true;                 // Ativa/desativa ataques de dinossauros
     let BASE_ATTACK_DAMAGE = 25                 // Qtd. base de HP decrementada do cercado por ataque 
-    let ATTACKS_INTERVAL_MS = 1 * 10 * 1000;     // Intervalo de ataques de dinossauros
+    let ATTACKS_INTERVAL_MS = 1 * 10 * 1000;    // Intervalo de ataques de dinossauros
+
+    let DEV_MODE_ENABLED = true;                // Ativa/desativa modo do desenvolvedor
 
     const speciesMap = {};
     const buildingsMap = {};
@@ -289,6 +369,12 @@
         }, EVENTS_INTERVAL_MS);
 
         const dinoAttackTimer = generateDinosaurAttackTimers();
+    }
+
+    function triggerDevScreen(event) {
+        if(DEV_MODE_ENABLED && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+            togglePanel("dev-screen", {withOverlay: false});
+        }
     }
 
     function submitEntranceForm(event) {

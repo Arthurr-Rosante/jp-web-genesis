@@ -1,0 +1,49 @@
+#dev-screen.open{ display: flex; }
+#dev-screen.closed{ display: none; }
+#dev-screen {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%);
+    width: 80vw;
+    height: 96px;
+
+    background-color: var(--background);
+    border: 2px solid var(--border);
+    border-top: none;
+    border-radius: 0px 0px 16px 16px;
+    font-family: "Courier Prime", monospace;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 48px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 16px;
+
+    z-index: 999 !important;
+    font-size: 9px;
+}
+
+#dev-screen button,
+#dev-screen input,
+#dev-screen select,
+#dev-screen option {
+    font-size: 9px;
+}
+
+.dev-item-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.dev-item {
+    width: min-content;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}

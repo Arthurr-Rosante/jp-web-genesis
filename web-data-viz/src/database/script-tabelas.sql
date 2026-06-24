@@ -157,6 +157,26 @@ VALUES
         'estegossauro', 
         'Jurássico Superior', 'Quadrúpede', 2.700, 5300.000, 
         'herbívoro', 0.6, 250, 0.6, 1.5
+    ),
+    (
+        'carnotauro',
+        'Cretáceo Superior', 'Bípede', 2.850, 4000.000,
+        'carnívoro', 0.7, 350, 0.6, 1.5
+    ),
+    (
+        'paquicefalossauro',
+        'Cretáceo Superior', 'Bípede', 1.800, 450.000,
+        'herbívoro', 0.7, 100, 0.8, 1.0
+    ),
+    (
+        'oviraptor',
+        'Cretáceo Superior', 'Bípede', 0.900, 40.000,
+        'onívoro', 0.2, 50, 0.9, 0.5
+    ),
+    (
+        'gallimimus',
+        'Cretáceo Superior', 'Bípede', 1.900, 450.000,
+        'onívoro', 0.2, 50, 0.9, 0.5
     );
 
 INSERT INTO building (idUpgrade, name, category, durability, baseCost, placeable, upgradeCost) 

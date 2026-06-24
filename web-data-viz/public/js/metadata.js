@@ -2,65 +2,77 @@ const imagesPath = "../assets/images";
 
 const speciesDataMap = {
     "anquilossauro": {
-        description: "Um gênero de dinossauro blindado do período Cretáceo Superior, conhecido por sua cauda pesada em forma de clava.",
         spriteUrl: imagesPath + "/dinosaurs/anquilossauro.png",
         iconUrl: imagesPath + "/dinosaurs/anquilossauro_icon.png",
     },
     "braquiossauro": {
-        description: "Um gênero de dinossauro saurópode que viveu na América do Norte durante o Jurássico Superior.",
         spriteUrl: imagesPath + "/dinosaurs/braquiossauro.png",
         iconUrl: imagesPath + "/dinosaurs/braquiossauro_icon.png",
     },
     "ceratossauro": {
-        description: "Um dinossauro terópode predador do período Jurássico Superior, possuindo um chifre proeminente.",
         spriteUrl: imagesPath + "/dinosaurs/ceratossauro.png",
         iconUrl: imagesPath + "/dinosaurs/ceratossauro_icon.png",
     },
     "compsognathus": {
-        description: "Um gênero de pequenos dinossauros terópodes carnívoros bípedes do Jurássico Superior.",
         spriteUrl: imagesPath + "/dinosaurs/compsognathus.png",
         iconUrl: imagesPath + "/dinosaurs/compsognathus_icon.png",
     },
     "coritossauro": {
-        description: "Um gênero de dinossauro hadrossaurídeo do período Cretáceo Superior, conhecido por sua crista distinta.",
         spriteUrl: imagesPath + "/dinosaurs/coritossauro.png",
         iconUrl: imagesPath + "/dinosaurs/coritossauro_icon.png",
     },
     "dilofossauro": {
-        description: "Um gênero de dinossauros terópodes que viveu na América do Norte durante o Jurássico Inferior.",
         spriteUrl: imagesPath + "/dinosaurs/dilofossauro.png",
         iconUrl: imagesPath + "/dinosaurs/dilofossauro_icon.png",
     },
     "espinossauro": {
-        description: "Um gênero de dinossauro espinossaurídeo que viveu no que hoje é o Norte da África durante o Cretáceo Superior.",
         spriteUrl: imagesPath + "/dinosaurs/espinossauro.png",
         iconUrl: imagesPath + "/dinosaurs/espinossauro_icon.png",
     },
     "estegossauro": {
-        description: "Um gênero de dinossauro herbívoro quadrúpede e blindado do período Jurássico Superior.",
         spriteUrl: imagesPath + "/dinosaurs/estegossauro.png",
         iconUrl: imagesPath + "/dinosaurs/estegossauro_icon.png",
     },
     "parassaurolofo": {
-        description: "Um dinossauro ornitópode herbívoro que viveu na América do Norte durante o Cretáceo Superior.",
         spriteUrl: imagesPath + "/dinosaurs/parassaurolofo.png",
         iconUrl: imagesPath + "/dinosaurs/parassaurolofo_icon.png",
     },
     "tiranossauro": {
-        description: "Um gênero de grandes dinossauros terópodes do Cretáceo Superior, amplamente conhecido como T. rex.",
         spriteUrl: imagesPath + "/dinosaurs/tiranossauro.png",
         iconUrl: imagesPath + "/dinosaurs/tiranossauro_icon.png",
     },
     "triceratops": {
-        description: "Um gênero de dinossauro ceratopsídeo herbívoro que surgiu durante o Cretáceo Superior.",
         spriteUrl: imagesPath + "/dinosaurs/triceratops.png",
         iconUrl: imagesPath + "/dinosaurs/triceratops_icon.png",
     },
     "velociraptor": {
-        description: "Um gênero de dinossauro terópode dromeossaurídeo que viveu durante a última parte do Cretáceo.",
         spriteUrl: imagesPath + "/dinosaurs/velociraptor.png",
         iconUrl: imagesPath + "/dinosaurs/velociraptor_icon.png",
-    }
+    },
+    "carnotauro": {
+        spriteUrl: imagesPath + "/dinosaurs/carnotauro.png",
+        iconUrl: imagesPath + "/dinosaurs/carnotauro_icon.png",
+    },
+    "gallimimus": {
+        spriteUrl: imagesPath + "/dinosaurs/gallimimus.png",
+        iconUrl: imagesPath + "/dinosaurs/gallimimus_icon.png",
+    },
+    "gallimimus": {
+        spriteUrl: imagesPath + "/dinosaurs/gallimimus.png",
+        iconUrl: imagesPath + "/dinosaurs/gallimimus_icon.png",
+    },
+    "paquicefalossauro": {
+        spriteUrl: imagesPath + "/dinosaurs/paquicefalossauro.png",
+        iconUrl: imagesPath + "/dinosaurs/paquicefalossauro_icon.png",
+    },
+    "paquicefalossauro": {
+        spriteUrl: imagesPath + "/dinosaurs/paquicefalossauro.png",
+        iconUrl: imagesPath + "/dinosaurs/paquicefalossauro_icon.png",
+    },
+    "oviraptor": {
+        spriteUrl: imagesPath + "/dinosaurs/oviraptor.png",
+        iconUrl: imagesPath + "/dinosaurs/oviraptor_icon.png",
+    },
 };
 
 const buildingsDataMap = {

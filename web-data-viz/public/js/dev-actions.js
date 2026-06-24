@@ -11,8 +11,7 @@ function setParkBalance() {
     const devInput = document.getElementById("dev-ipt-park-balance");
     if(!devInput || !devInput.value) return;
 
-    const amount = Math.abs(Number(devInput.value));
-    const newBalance = gameData.park.balance + amount;
+    const newBalance = Math.abs(Number(devInput.value));
 
     // Atualizar sessionStorage
     gameData.park.balance = newBalance;

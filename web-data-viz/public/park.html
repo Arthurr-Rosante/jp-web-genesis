@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jurassic Park: Web Genesis</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   
     <!-- ESTILOS CSS -->
     <link rel="stylesheet" href="./css/globals.css">
@@ -189,6 +190,13 @@
 
     <!-- Tela do Desenvolvedor -->
     <div id="dev-screen" class="closed">
+        <!-- Controles de Parque -->
+        <div class="dev-item-group">
+            <div class="dev-item">
+                <input id="dev-ipt-park-balance" type="number" min="0" max="999999">
+                <button id="dev-park-balance-btn" onclick="setParkBalance()">Alterar Saldo</button>
+            </div>
+        </div>
         <!-- Controles de Incubação -->
         <div class="dev-item-group">
             <div class="dev-item">

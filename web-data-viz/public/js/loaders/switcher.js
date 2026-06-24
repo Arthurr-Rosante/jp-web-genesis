@@ -83,7 +83,7 @@ function loadTileSwitcher(selectedTile) {
                 return;
             }
 
-            await changeTile(selectedTile, terrainGrass);
+            await changeTile(selectedTile, terrainGrass, true); //parâmetro de remoção
 
             togglePanel("tile-switcher", {onToggle: cleanSelectedTiles});
         }

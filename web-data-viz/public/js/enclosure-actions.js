@@ -227,8 +227,10 @@ function releaseDinosaur(tile) {
 
         // atualiza sessionStorage
         const updatedTiles = data.tiles;
+        const newBalance = gameData.park.balance + Math.ceil(tile.dinosaur.hatchCost * 0.25); // devolve 25% do preço de incubação
 
         gameData.tiles = updatedTiles;
+        gameData.park.balance = newBalance;
         gameData.park.rating = gameData.park.rating - tile.dinosaur.ratingWeight;
         storage.set("JPWG_DATA", gameData);
 

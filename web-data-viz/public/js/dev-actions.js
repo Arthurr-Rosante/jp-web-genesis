@@ -21,7 +21,7 @@ function setParkBalance() {
     loadParkBalance(newBalance);
     updateBalanceChart(newBalance);
 
-    console.log(`Dev: +${amount} às ${new Date().toLocaleTimeString()}`);
+    console.log(`Dev: +${newBalance} às ${new Date().toLocaleTimeString()}`);
 }
 
 // Controles de Incubação

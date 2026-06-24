@@ -1,4 +1,4 @@
-async function changeTile(oldTile, newTile) {
+async function changeTile(oldTile, newTile, remove = false) {
     let gameData = storage.get("JPWG_DATA");
     if(!gameData || !gameData.park) {
         toast({
@@ -12,13 +12,18 @@ async function changeTile(oldTile, newTile) {
     const {park} = gameData;
 
     // Checa insuficiência do saldo
-    const newBalance = park.balance - newTile.baseCost;
-    if(newBalance < 0) {
-        toast({
-            title: "Operação Negada",
-            message: "Você não possui saldo suficiente!"
-        });
-        return;
+    let newBalance;
+    if(remove) {
+        newBalance = park.balance + Math.ceil(oldTile.baseCost * 0.25);
+    } else {
+        newBalance = park.balance - newTile.baseCost;
+        if(newBalance < 0) {
+            toast({
+                title: "Operação Negada",
+                message: "Você não possui saldo suficiente!"
+            });
+            return;
+        }
     }
 
 

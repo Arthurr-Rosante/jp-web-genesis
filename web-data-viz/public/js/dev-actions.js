@@ -3,6 +3,28 @@ function enabledOrDisabled(bool) {
     return "desabilitados(as)"
 }
 
+// Controles de Parque
+function setParkBalance() {
+    let gameData = storage.get("JPWG_DATA");
+    if(!gameData) return;
+
+    const devInput = document.getElementById("dev-ipt-park-balance");
+    if(!devInput || !devInput.value) return;
+
+    const amount = Math.abs(Number(devInput.value));
+    const newBalance = gameData.park.balance + amount;
+
+    // Atualizar sessionStorage
+    gameData.park.balance = newBalance;
+    storage.set("JPWG_DATA", gameData);
+
+    // Atualizar UI
+    loadParkBalance(newBalance);
+    updateBalanceChart(newBalance);
+
+    console.log(`Dev: +${amount} às ${new Date().toLocaleTimeString()}`);
+}
+
 // Controles de Incubação
 function toggleFails(event) {
    const value = JSON.parse(event.target.value);
@@ -18,7 +40,7 @@ function setHatchSuccessMultiplier(event) {
 
 function setHatchProgress(event) {
     const value = Number(event.target.value);
-    BASE_HATCH_SUCCESS_MULTIPLIER = value;
+    BASE_HATCH_PROGRESS_MS = value * 1000;
     console.log(`Dev: Progresso de incubação configurado para: ${value} às ${new Date().toLocaleTimeString()}`);
 }
 

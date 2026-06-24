@@ -264,50 +264,106 @@ body {
 
 /* Dinossauros */
 .dinosaur {
+    --scale: 0.75;
+
+    width: calc(var(--tile-w) * var(--scale));
+    height: calc(var(--tile-h) * var(--scale));
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+
     position: absolute;
-    /* top: 50%;
-    left: 50%; */
-    transform: translateY(-8%) rotateZ(0deg) scale(0.5);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
     clip-path: none;
     pointer-events: none;
-    inset: 0;
 }
 
 .anquilossauro {
     background-image: url("../assets/images/dinosaurs/anquilossauro.png");
+    left: 45%;
 }
 .braquiossauro {
     background-image: url("../assets/images/dinosaurs/braquiossauro.png");
+    top: 30%;
+    left: 45%;
 }
 .ceratossauro {
     background-image: url("../assets/images/dinosaurs/ceratossauro.png");
+    --scale: 0.4;
+    top: 45%;
+    left: 45%;
 }
 .coritossauro {
     background-image: url("../assets/images/dinosaurs/coritossauro.png");
+    --scale: 0.5;
+    top: 45%;
+    left: 55%;
 }
 .compsognathus {
     background-image: url("../assets/images/dinosaurs/compsognathus.png");
+    --scale: 0.4;
 }
 .dilofossauro {
     background-image: url("../assets/images/dinosaurs/dilofossauro.png");
+    --scale: 0.4;
+    top: 45%;
+    left: 55%;
 }
 .espinossauro {
     background-image: url("../assets/images/dinosaurs/espinossauro.png");
+    top: 40%;
+    --scale: 0.8;
 }
 .estegossauro {
     background-image: url("../assets/images/dinosaurs/estegossauro.png");
+    top: 45%;
+    left: 55%;
 }
 .parassaurolofo {
     background-image: url("../assets/images/dinosaurs/parassaurolofo.png");
+    --scale: 0.45;
+    top: 40%;
+    left: 45%;
 }
 .tiranossauro {
     background-image: url("../assets/images/dinosaurs/tiranossauro.png");
+    --scale: 0.65;
+    top: 40%;
+    left: 50%;
 }
 .triceratops {
     background-image: url("../assets/images/dinosaurs/triceratops.png");
+    --scale: 0.65;
+    left: 50%;
 }
 .velociraptor {
     background-image: url("../assets/images/dinosaurs/velociraptor.png");
+    --scale: 0.4;
+    left: 55%;
+}
+.carnotauro {
+    background-image: url("../assets/images/dinosaurs/carnotauro.png");
+    --scale: 0.6;
+    left: 55%;
+}
+.paquicefalossauro {
+    background-image: url("../assets/images/dinosaurs/paquicefalossauro.png");
+    --scale: 0.45;
+    left: 45%;
+}
+.gallimimus {
+    background-image: url("../assets/images/dinosaurs/gallimimus.png");
+    --scale: 0.45;
+    left: 45%;
+}
+.oviraptor {
+    background-image: url("../assets/images/dinosaurs/oviraptor.png");
+    --scale: 0.45;
+    top: 55%;
+    left: 55%;
 }
 
 .rain {
